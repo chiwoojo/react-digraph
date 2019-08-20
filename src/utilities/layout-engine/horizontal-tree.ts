@@ -14,9 +14,9 @@
   limitations under the License.
 */
 
-import * as dagre from "dagre";
-import { INode } from "../../components/node";
-import SnapToGrid from "./snap-to-grid";
+import * as dagre from 'dagre';
+import { INode } from '../../components/node';
+import SnapToGrid from './snap-to-grid';
 
 class HorizontalTree extends SnapToGrid {
   adjustNodes(nodes: INode[], nodesMap?: any): INode[] {
@@ -24,7 +24,7 @@ class HorizontalTree extends SnapToGrid {
     const size = (nodeSize || 1) * 1.5;
     const g = new dagre.graphlib.Graph();
 
-    g.setGraph({ rankdir: "LR" });
+    g.setGraph({ rankdir: 'LR' });
     g.setDefaultEdgeLabel(() => ({}));
 
     nodes.forEach(node => {

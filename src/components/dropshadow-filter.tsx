@@ -14,7 +14,7 @@
   limitations under the License.
 */
 
-import * as React from "react";
+import * as React from 'react';
 
 class DropshadowFilter extends React.Component<any> {
   render() {

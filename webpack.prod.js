@@ -8,7 +8,7 @@ module.exports = {
   context: __dirname + '/src',
   entry: {
     main: './index.js',
-    css: './styles/main.scss'
+    css: './styles/main.scss',
   },
 
   output: {
@@ -17,12 +17,12 @@ module.exports = {
     path: __dirname + '/dist',
     publicPath: '/dist/',
     library: 'ReactDigraph',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
   },
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: ['.ts', '.tsx', '.js', '.json']
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
 
   module: {
@@ -34,7 +34,7 @@ module.exports = {
         loader: 'eslint-loader',
         options: {
           configFile: '.eslintrc',
-        }
+        },
       },
       {
         test: /\.jsx?$/,
@@ -46,16 +46,16 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              babelrc: true
-            }
+              babelrc: true,
+            },
           },
-        ]
+        ],
       },
       // All files with a '.ts' or '.tsx' extension will be handled by
       // 'awesome-typescript-loader'.
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader'
+        loader: 'ts-loader',
       },
 
       // All scss files
@@ -63,30 +63,30 @@ module.exports = {
         test: /\.s?css$/,
         use: [
           {
-            loader: 'style-loader' // creates style nodes from JS strings
+            loader: 'style-loader', // creates style nodes from JS strings
           },
           {
-            loader: 'css-loader' // translates CSS into CommonJS
+            loader: 'css-loader', // translates CSS into CommonJS
           },
           {
-            loader: 'sass-loader' // compiles Sass to CSS
-          }
-        ]
+            loader: 'sass-loader', // compiles Sass to CSS
+          },
+        ],
       },
       {
         test: /\.svg$/,
-        loader: 'svg-inline-loader'
-      }
-    ]
+        loader: 'svg-inline-loader',
+      },
+    ],
   },
 
   plugins: [
     new UglifyJSPlugin({
-      sourceMap: true
+      sourceMap: true,
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
   ],
 
   externals: {
@@ -96,15 +96,15 @@ module.exports = {
       root: 'react',
       global: 'React',
       commonjs: 'react',
-      commonjs2: 'react'
+      commonjs2: 'react',
     },
     'react-dom': {
       amd: 'react-dom',
       root: 'react-dom',
       global: 'ReactDOM',
       commonjs: 'react-dom',
-      commonjs2: 'react-dom'
+      commonjs2: 'react-dom',
     },
-    tslib: 'tslib'
-  }
+    tslib: 'tslib',
+  },
 };

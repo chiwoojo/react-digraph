@@ -14,18 +14,18 @@
   limitations under the License.
 */
 
-import * as React from "react";
+import * as React from 'react';
 
-type IBackgroundProps = {
+interface IBackgroundProps {
   gridSize?: number;
   backgroundFillId?: string;
   renderBackground?: (gridSize?: number) => any;
-};
+}
 
 class Background extends React.Component<IBackgroundProps> {
   static defaultProps = {
-    backgroundFillId: "#grid",
-    gridSize: 40960
+    backgroundFillId: '#grid',
+    gridSize: 40960,
   };
 
   render() {
@@ -42,7 +42,7 @@ class Background extends React.Component<IBackgroundProps> {
         y={-(gridSize || 0) / 4}
         width={gridSize}
         height={gridSize}
-        fill={`url(${backgroundFillId || ""})`}
+        fill={`url(${backgroundFillId || ''})`}
       />
     );
   }

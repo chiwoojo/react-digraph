@@ -17,20 +17,20 @@
 /*
   Example config for GraphView component
 */
-import * as React from "react";
+import * as React from 'react';
 
-export const NODE_KEY = "id"; // Key used to identify nodes
+export const NODE_KEY = 'id'; // Key used to identify nodes
 
 // These keys are arbitrary (but must match the config)
 // However, GraphView renders text differently for empty types
 // so this has to be passed in if that behavior is desired.
-export const EMPTY_TYPE = "customEmpty"; // Empty node type
-export const POLY_TYPE = "poly";
-export const SPECIAL_TYPE = "special";
-export const SKINNY_TYPE = "skinny";
-export const SPECIAL_CHILD_SUBTYPE = "specialChild";
-export const EMPTY_EDGE_TYPE = "emptyEdge";
-export const SPECIAL_EDGE_TYPE = "specialEdge";
+export const EMPTY_TYPE = 'customEmpty'; // Empty node type
+export const POLY_TYPE = 'poly';
+export const SPECIAL_TYPE = 'special';
+export const SKINNY_TYPE = 'skinny';
+export const SPECIAL_CHILD_SUBTYPE = 'specialChild';
+export const EMPTY_EDGE_TYPE = 'emptyEdge';
+export const SPECIAL_EDGE_TYPE = 'specialEdge';
 
 export const nodeTypes = [EMPTY_TYPE, POLY_TYPE, SPECIAL_TYPE, SKINNY_TYPE];
 export const edgeTypes = [EMPTY_EDGE_TYPE, SPECIAL_EDGE_TYPE];
@@ -100,44 +100,44 @@ export default {
   EdgeTypes: {
     emptyEdge: {
       shape: EmptyEdgeShape,
-      shapeId: "#emptyEdge"
+      shapeId: '#emptyEdge',
     },
     specialEdge: {
       shape: SpecialEdgeShape,
-      shapeId: "#specialEdge"
-    }
+      shapeId: '#specialEdge',
+    },
   },
   NodeSubtypes: {
     specialChild: {
       shape: SpecialChildShape,
-      shapeId: "#specialChild"
-    }
+      shapeId: '#specialChild',
+    },
   },
   NodeTypes: {
     emptyNode: {
       shape: EmptyNodeShape,
-      shapeId: "#emptyNode",
-      typeText: "None"
+      shapeId: '#emptyNode',
+      typeText: 'None',
     },
     empty: {
       shape: CustomEmptyShape,
-      shapeId: "#empty",
-      typeText: "None"
+      shapeId: '#empty',
+      typeText: 'None',
     },
     special: {
       shape: SpecialShape,
-      shapeId: "#special",
-      typeText: "Special"
+      shapeId: '#special',
+      typeText: 'Special',
     },
     skinny: {
       shape: SkinnyShape,
-      shapeId: "#skinny",
-      typeText: "Skinny"
+      shapeId: '#skinny',
+      typeText: 'Skinny',
     },
     poly: {
       shape: PolyShape,
-      shapeId: "#poly",
-      typeText: "Poly"
-    }
-  }
+      shapeId: '#poly',
+      typeText: 'Poly',
+    },
+  },
 };

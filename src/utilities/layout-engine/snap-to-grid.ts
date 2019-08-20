@@ -14,7 +14,7 @@
   limitations under the License.
 */
 
-import LayoutEngine, { IPosition } from "./layout-engine";
+import LayoutEngine, { IPosition } from './layout-engine';
 
 class SnapToGrid extends LayoutEngine {
   calculatePosition(node: IPosition) {
@@ -55,7 +55,7 @@ class SnapToGrid extends LayoutEngine {
 
     return {
       x: newX,
-      y: newY
+      y: newY,
     };
   }
 }

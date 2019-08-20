@@ -16,29 +16,28 @@
 
 import * as d3 from 'd3';
 import * as React from 'react';
-// This works in Typescript but causes an import loop for Flowtype. We'll just use `any` below.
-// import { type LayoutEngine } from '../utilities/layout-engine/layout-engine-config';
 import Edge from './edge';
 import GraphUtils from '../utilities/graph-util';
 import NodeText from './node-text';
 
-export type IPoint = {
+export interface IPoint {
   x: number;
   y: number;
-};
+}
 
-export type INode = {
+export interface INode {
   title: string;
   x?: number | null;
   y?: number | null;
   type?: string | null;
   subtype?: string | null;
   [key: string]: any;
-};
+}
 
-type INodeProps = {
+interface INodeProps {
   data: INode;
   id: string;
+  index?: number;
   nodeTypes: any; // TODO: make a nodeTypes interface,
   nodeSubtypes: any; // TODO: make a nodeSubtypes interface,
   opacity?: number;
@@ -67,9 +66,9 @@ type INodeProps = {
   viewWrapperElem: HTMLDivElement;
   centerNodeOnMove: boolean;
   maxTitleChars: number;
-};
+}
 
-type INodeState = {
+interface INodeState {
   hovered: boolean;
   x: number;
   y: number;
@@ -83,7 +82,7 @@ type INodeState = {
       }
     | undefined
     | null;
-};
+}
 
 class Node extends React.Component<INodeProps, INodeState> {
   static defaultProps = {
@@ -163,6 +162,7 @@ class Node extends React.Component<INodeProps, INodeState> {
     const newState = {
       x: d3.event.x,
       y: d3.event.y,
+      pointerOffset: undefined,
     };
 
     if (!this.props.centerNodeOnMove) {

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-import LayoutEngine, { IPosition } from "./layout-engine";
+import LayoutEngine, { IPosition } from './layout-engine';
 
 class None extends LayoutEngine {
   calculatePosition(node: IPosition) {

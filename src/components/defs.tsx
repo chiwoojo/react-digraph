@@ -14,12 +14,12 @@
   limitations under the License.
 */
 
-import * as React from "react";
-import ArrowheadMarker from "./arrowhead-marker";
-import BackgroundPattern from "./background-pattern";
-import DropshadowFilter from "./dropshadow-filter";
+import * as React from 'react';
+import ArrowheadMarker from './arrowhead-marker';
+import BackgroundPattern from './background-pattern';
+import DropshadowFilter from './dropshadow-filter';
 
-type IDefsProps = {
+interface IDefsProps {
   gridSpacing?: number;
   gridDotSize?: number;
   edgeArrowSize?: number;
@@ -27,16 +27,16 @@ type IDefsProps = {
   nodeSubtypes: any;
   edgeTypes: any;
   renderDefs?: () => any | null;
-};
+}
 
-type IDefsState = {
+interface IDefsState {
   graphConfigDefs: any;
-};
+}
 
 class Defs extends React.Component<IDefsProps, IDefsState> {
   static defaultProps = {
     gridDotSize: 2,
-    renderDefs: () => null
+    renderDefs: () => null,
   };
 
   static getDerivedStateFromProps(nextProps: any, prevState: any) {
@@ -47,19 +47,19 @@ class Defs extends React.Component<IDefsProps, IDefsState> {
     Defs.processGraphConfigDefs(nextProps.edgeTypes, graphConfigDefs);
 
     return {
-      graphConfigDefs
+      graphConfigDefs,
     };
   }
 
   static processGraphConfigDefs(typesObj: any, graphConfigDefs: any) {
     Object.keys(typesObj).forEach(type => {
       const safeId = typesObj[type].shapeId
-        ? typesObj[type].shapeId.replace("#", "")
-        : "graphdef";
+        ? typesObj[type].shapeId.replace('#', '')
+        : 'graphdef';
 
       graphConfigDefs.push(
         React.cloneElement(typesObj[type].shape, {
-          key: `${safeId}-${graphConfigDefs.length + 1}`
+          key: `${safeId}-${graphConfigDefs.length + 1}`,
         })
       );
     });
@@ -68,7 +68,7 @@ class Defs extends React.Component<IDefsProps, IDefsState> {
   constructor(props: IDefsProps) {
     super(props);
     this.state = {
-      graphConfigDefs: []
+      graphConfigDefs: [],
     };
   }
 

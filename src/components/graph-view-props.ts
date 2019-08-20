@@ -14,18 +14,18 @@
   limitations under the License.
 */
 
-import { LayoutEngineType } from "../utilities/layout-engine/layout-engine-types";
-import { IEdge } from "./edge";
-import { INode } from "./node";
+import { LayoutEngineType } from '../utilities/layout-engine/layout-engine-types';
+import { IEdge } from './edge';
+import { INode } from './node';
 
-export type IBBox = {
+export interface IBBox {
   x: number;
   y: number;
   width: number;
   height: number;
-};
+}
 
-export type IGraphViewProps = {
+export interface IGraphViewProps {
   backgroundFillId?: string;
   edges: any[];
   edgeArrowSize?: number;
@@ -62,7 +62,7 @@ export type IGraphViewProps = {
   onDeleteNode: (selected: any, nodeId: string, nodes: any[]) => void;
   onPasteSelected?: () => void;
   onSelectEdge: (selectedEdge: IEdge) => void;
-  onSelectNode: (node: INode | null, event: any) => void;
+  onSelectNode: (node: INode | null, event?: any) => void;
   onSwapEdge: (sourceNode: INode, targetNode: INode, edge: IEdge) => void;
   onUndo?: () => void;
   onUpdateNode: (node: INode) => void;
@@ -85,5 +85,5 @@ export type IGraphViewProps = {
   renderNodeText?: (data: any, id: string | number, isSelected: boolean) => any;
   rotateEdgeHandle?: boolean;
   centerNodeOnMove?: boolean;
-  initialBBox: IBBox;
-};
+  initialBBox?: IBBox;
+}

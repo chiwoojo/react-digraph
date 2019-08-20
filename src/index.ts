@@ -14,21 +14,21 @@
   limitations under the License.
 */
 
-import GV from "./components/graph-view";
-import { LayoutEngine as LayoutEngineConfigTypes } from "./utilities/layout-engine/layout-engine-config";
-import { IEdge } from "./components/edge";
-import { INode } from "./components/node";
+import GV from './components/graph-view';
+import { LayoutEngine as LayoutEngineConfigTypes } from './utilities/layout-engine/layout-engine-config';
+import { IEdge } from './components/edge';
+import { INode } from './components/node';
 
-export { default as GraphViewFast } from "./components/graph-view";
+export { default as GraphViewFast } from './components/graph-view';
 
-export { default as Edge } from "./components/edge";
+export { default as Edge } from './components/edge';
 export type IEdgeType = IEdge;
-export { default as GraphUtils } from "./utilities/graph-util";
-export { default as Node } from "./components/node";
+export { default as GraphUtils } from './utilities/graph-util';
+export { default as Node } from './components/node';
 export type INodeType = INode;
 export {
-  default as BwdlTransformer
-} from "./utilities/transformers/bwdl-transformer";
+  default as BwdlTransformer,
+} from './utilities/transformers/bwdl-transformer';
 export { GV as GraphView };
 export type LayoutEngineType = LayoutEngineConfigTypes;
 export default GV;

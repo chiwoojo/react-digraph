@@ -17,22 +17,22 @@
 /*
   Example config for GraphView component
 */
-import * as React from "react";
+import * as React from 'react';
 
-export const NODE_KEY = "title"; // Key used to identify nodes
+export const NODE_KEY = 'title'; // Key used to identify nodes
 
 // These keys are arbitrary (but must match the config)
 // However, GraphView renders text differently for empty types
 // so this has to be passed in if that behavior is desired.
-export const EMPTY_TYPE = "empty"; // Empty node type
-export const CHOICE_TYPE = "Choice";
-export const TASK_TYPE = "Task";
-export const PASS_TYPE = "Pass";
-export const WAIT_TYPE = "Wait";
-export const TERMINATOR_TYPE = "Terminator";
-export const SPECIAL_CHILD_SUBTYPE = "specialChild";
-export const EMPTY_EDGE_TYPE = "emptyEdge";
-export const SPECIAL_EDGE_TYPE = "specialEdge";
+export const EMPTY_TYPE = 'empty'; // Empty node type
+export const CHOICE_TYPE = 'Choice';
+export const TASK_TYPE = 'Task';
+export const PASS_TYPE = 'Pass';
+export const WAIT_TYPE = 'Wait';
+export const TERMINATOR_TYPE = 'Terminator';
+export const SPECIAL_CHILD_SUBTYPE = 'specialChild';
+export const EMPTY_EDGE_TYPE = 'emptyEdge';
+export const SPECIAL_EDGE_TYPE = 'specialEdge';
 
 export const nodeTypes = [
   EMPTY_TYPE,
@@ -40,7 +40,7 @@ export const nodeTypes = [
   TASK_TYPE,
   PASS_TYPE,
   WAIT_TYPE,
-  TERMINATOR_TYPE
+  TERMINATOR_TYPE,
 ];
 export const edgeTypes = [EMPTY_EDGE_TYPE, SPECIAL_EDGE_TYPE];
 
@@ -115,49 +115,49 @@ export default {
   EdgeTypes: {
     emptyEdge: {
       shape: EmptyEdgeShape,
-      shapeId: "#emptyEdge"
+      shapeId: '#emptyEdge',
     },
     specialEdge: {
       shape: SpecialEdgeShape,
-      shapeId: "#specialEdge"
-    }
+      shapeId: '#specialEdge',
+    },
   },
   NodeSubtypes: {
     specialChild: {
       shape: SpecialChildShape,
-      shapeId: "#specialChild"
-    }
+      shapeId: '#specialChild',
+    },
   },
   NodeTypes: {
     Choice: {
       shape: ChoiceShape,
-      shapeId: "#choice",
-      typeText: "Choice"
+      shapeId: '#choice',
+      typeText: 'Choice',
     },
     emptyNode: {
       shape: EmptyShape,
-      shapeId: "#empty",
-      typeText: "None"
+      shapeId: '#empty',
+      typeText: 'None',
     },
     Pass: {
       shape: PassShape,
-      shapeId: "#pass",
-      typeText: "Pass"
+      shapeId: '#pass',
+      typeText: 'Pass',
     },
     Task: {
       shape: TaskShape,
-      shapeId: "#task",
-      typeText: "Task"
+      shapeId: '#task',
+      typeText: 'Task',
     },
     Terminator: {
       shape: TerminatorShape,
-      shapeId: "#terminator",
-      typeText: "Terminator"
+      shapeId: '#terminator',
+      typeText: 'Terminator',
     },
     Wait: {
       shape: WaitShape,
-      shapeId: "#wait",
-      typeText: "Wait"
-    }
-  }
+      shapeId: '#wait',
+      typeText: 'Wait',
+    },
+  },
 };

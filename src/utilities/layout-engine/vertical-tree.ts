@@ -14,9 +14,9 @@
   limitations under the License.
 */
 
-import * as dagre from "dagre";
-import { INode } from "../../components/node";
-import SnapToGrid from "./snap-to-grid";
+import * as dagre from 'dagre';
+import { INode } from '../../components/node';
+import SnapToGrid from './snap-to-grid';
 
 class VerticalTree extends SnapToGrid {
   adjustNodes(nodes: INode[], nodesMap?: any): INode[] {
@@ -25,7 +25,7 @@ class VerticalTree extends SnapToGrid {
       nodeSize,
       nodeHeight,
       nodeWidth,
-      nodeSpacingMultiplier
+      nodeSpacingMultiplier,
     } = this.graphViewProps;
     const g = new dagre.graphlib.Graph();
 

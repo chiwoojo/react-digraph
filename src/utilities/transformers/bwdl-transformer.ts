@@ -14,16 +14,16 @@
   limitations under the License.
 */
 
-import { IEdge } from "../../components/edge";
-import { INode } from "../../components/node";
-import Transformer, { IGraphInput } from "./transformer";
+import { IEdge } from '../../components/edge';
+import { INode } from '../../components/node';
+import Transformer, { IGraphInput } from './transformer';
 
 export default class BwdlTransformer extends Transformer {
   static transform(input: any) {
     if (!input.States) {
       return {
         edges: [],
-        nodes: []
+        nodes: [],
       };
     }
 
@@ -43,7 +43,7 @@ export default class BwdlTransformer extends Transformer {
         title: name,
         type: currentNode.Type,
         x: currentNode.x || 0,
-        y: currentNode.y || 0
+        y: currentNode.y || 0,
       };
 
       if (name === input.StartAt) {
@@ -53,13 +53,13 @@ export default class BwdlTransformer extends Transformer {
       }
 
       // create edges
-      if (currentNode.Type === "Choice") {
+      if (currentNode.Type === 'Choice') {
         // multiple edges
         currentNode.Choices.forEach(choice => {
           if (input.States[choice.Next]) {
             edges.push({
               source: name,
-              target: choice.Next
+              target: choice.Next,
             });
           }
         });
@@ -68,7 +68,7 @@ export default class BwdlTransformer extends Transformer {
         if (currentNode.Default) {
           edges.push({
             source: name,
-            target: currentNode.Default
+            target: currentNode.Default,
           });
         }
       } else if (currentNode.Next) {
@@ -76,7 +76,7 @@ export default class BwdlTransformer extends Transformer {
           // single edge
           edges.push({
             source: name,
-            target: currentNode.Next
+            target: currentNode.Next,
           });
         }
       }
@@ -84,7 +84,7 @@ export default class BwdlTransformer extends Transformer {
 
     return {
       edges,
-      nodes
+      nodes,
     };
   }
 

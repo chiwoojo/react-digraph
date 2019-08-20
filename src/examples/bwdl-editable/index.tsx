@@ -14,18 +14,18 @@
   limitations under the License.
 */
 
-import * as React from "react";
-import AceEditor from "react-ace";
-import "brace/mode/json";
-import "brace/theme/monokai";
-import { IEdge } from "../../components/edge";
-import GraphView from "../../components/graph-view";
-import { INode } from "../../components/node";
-import { LayoutEngineType } from "../../utilities/layout-engine/layout-engine-types";
-import BwdlTransformer from "../../utilities/transformers/bwdl-transformer";
-import Sidebar from "../sidebar";
-import GraphConfig, { EMPTY_TYPE, NODE_KEY } from "./bwdl-config"; // Configures node/edge types
-import bwdlExample from "./bwdl-example-data";
+import * as React from 'react';
+import * as AceEditor from 'react-ace';
+import 'brace/mode/json';
+import 'brace/theme/monokai';
+import { IEdge } from '../../components/edge';
+import GraphView from '../../components/graph-view';
+import { INode } from '../../components/node';
+import { LayoutEngineType } from '../../utilities/layout-engine/layout-engine-types';
+import BwdlTransformer from '../../utilities/transformers/bwdl-transformer';
+import Sidebar from '../sidebar';
+import GraphConfig, { EMPTY_TYPE, NODE_KEY } from './bwdl-config'; // Configures node/edge types
+import bwdlExample from './bwdl-example-data';
 
 type IBwdlState = {
   nodes: INode[];
@@ -50,21 +50,21 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
       bwdlText: JSON.stringify(bwdlExample, null, 2),
       copiedNode: null,
       edges: transformed.edges,
-      layoutEngineType: "VerticalTree",
+      layoutEngineType: 'VerticalTree',
       nodes: transformed.nodes,
-      selected: null
+      selected: null,
     };
   }
 
   linkEdge(sourceNode: INode, targetNode: INode, edge?: IEdge) {
     const newBwdlJson = {
-      ...this.state.bwdlJson
+      ...this.state.bwdlJson,
     };
     const sourceNodeBwdl = newBwdlJson.States[sourceNode.title];
 
-    if (sourceNodeBwdl.Type === "Choice") {
+    if (sourceNodeBwdl.Type === 'Choice') {
       const newChoice = {
-        Next: targetNode.title
+        Next: targetNode.title,
       };
 
       if (sourceNodeBwdl.Choices) {
@@ -92,30 +92,30 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
 
     this.setState({
       bwdlJson: newBwdlJson,
-      bwdlText: JSON.stringify(newBwdlJson, null, 2)
+      bwdlText: JSON.stringify(newBwdlJson, null, 2),
     });
     this.updateBwdl();
   }
 
   onSelectNode = (node: INode | null) => {
     this.setState({
-      selected: node
+      selected: node,
     });
   };
 
   onCreateNode = (x: number, y: number) => {
     const newBwdlJson = {
-      ...this.state.bwdlJson
+      ...this.state.bwdlJson,
     };
 
     newBwdlJson.States[`New Item ${Date.now()}`] = {
       Type: EMPTY_TYPE,
       x,
-      y
+      y,
     };
     this.setState({
       bwdlJson: newBwdlJson,
-      bwdlText: JSON.stringify(newBwdlJson, null, 2)
+      bwdlText: JSON.stringify(newBwdlJson, null, 2),
     });
     this.updateBwdl();
   };
@@ -125,20 +125,20 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
 
   onDeleteNode = (selected: INode, nodeId: string, nodes: any[]) => {
     const newBwdlJson = {
-      ...this.state.bwdlJson
+      ...this.state.bwdlJson,
     };
 
     delete newBwdlJson.States[selected.title];
     this.setState({
       bwdlJson: newBwdlJson,
-      bwdlText: JSON.stringify(newBwdlJson, null, 2)
+      bwdlText: JSON.stringify(newBwdlJson, null, 2),
     });
     this.updateBwdl();
   };
 
   onSelectEdge = (edge: IEdge) => {
     this.setState({
-      selected: edge
+      selected: edge,
     });
   };
 
@@ -152,7 +152,7 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
 
   onDeleteEdge = (selectedEdge: IEdge, edges: IEdge[]) => {
     const newBwdlJson = {
-      ...this.state.bwdlJson
+      ...this.state.bwdlJson,
     };
     const sourceNodeBwdl = newBwdlJson.States[selectedEdge.source];
 
@@ -166,13 +166,13 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
 
     this.setState({
       bwdlJson: newBwdlJson,
-      bwdlText: JSON.stringify(newBwdlJson, null, 2)
+      bwdlText: JSON.stringify(newBwdlJson, null, 2),
     });
     this.updateBwdl();
   };
 
   onUndo() {
-    alert("Undo is not supported yet.");
+    alert('Undo is not supported yet.');
   }
 
   onCopySelected = () => {
@@ -186,7 +186,7 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
     const newItem = JSON.parse(JSON.stringify(original));
 
     this.setState({
-      copiedNode: newItem
+      copiedNode: newItem,
     });
   };
 
@@ -196,12 +196,12 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
     bwdlJson.States[`New Item ${Date.now()}`] = copiedNode;
 
     const newBwdlJson = {
-      ...bwdlJson
+      ...bwdlJson,
     };
 
     this.setState({
       bwdlJson: newBwdlJson,
-      bwdlText: JSON.stringify(newBwdlJson, null, 2)
+      bwdlText: JSON.stringify(newBwdlJson, null, 2),
     });
     this.updateBwdl();
   };
@@ -211,7 +211,7 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
 
     this.setState({
       edges: transformed.edges,
-      nodes: transformed.nodes
+      nodes: transformed.nodes,
     });
   };
 
@@ -220,7 +220,7 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
     const bwdlText = value;
 
     this.setState({
-      bwdlText
+      bwdlText,
     });
 
     try {
@@ -230,7 +230,7 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
     }
 
     this.setState({
-      bwdlJson: input
+      bwdlJson: input,
     });
 
     this.updateBwdl();
@@ -238,7 +238,7 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
 
   renderSidebar() {
     return (
-      <Sidebar direction="left" size={"100%"}>
+      <Sidebar direction="left" size={'100%'}>
         <div>
           <AceEditor
             mode="json"
@@ -254,7 +254,7 @@ class BwdlEditable extends React.Component<{}, IBwdlState> {
             showGutter={true}
             setOptions={{
               showLineNumbers: true,
-              tabSize: 2
+              tabSize: 2,
             }}
             value={this.state.bwdlText}
           />

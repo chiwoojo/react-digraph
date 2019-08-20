@@ -14,17 +14,17 @@
   limitations under the License.
 */
 
-import * as React from "react";
+import * as React from 'react';
 
-type ICircleProps = {
+interface ICircleProps {
   gridSpacing?: number;
   gridDotSize?: number;
-};
+}
 
 class Circle extends React.Component<ICircleProps> {
   static defaultProps = {
     gridDotSize: 2,
-    gridSpacing: 36
+    gridSpacing: 36,
   };
 
   render() {

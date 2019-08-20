@@ -15,14 +15,14 @@
 */
 
 // import { type IGraphViewProps } from '../../components/graph-view';
-import { IGraphViewProps } from "../../components/graph-view-props";
-import { INode } from "../../components/node";
+import { IGraphViewProps } from '../../components/graph-view-props';
+import { INode } from '../../components/node';
 
-export type IPosition = {
+export interface IPosition {
   x: number;
   y: number;
   [key: string]: any;
-};
+}
 
 export default class LayoutEngine {
   graphViewProps: IGraphViewProps;
@@ -41,7 +41,7 @@ export default class LayoutEngine {
       node = nodes[i];
       const position = this.calculatePosition({
         x: node.x || 0,
-        y: node.y || 0
+        y: node.y || 0,
       });
 
       node.x = position.x;

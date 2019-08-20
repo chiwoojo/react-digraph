@@ -14,19 +14,19 @@
   limitations under the License.
 */
 
-import * as React from "react";
-import AceEditor from "react-ace";
-import "brace/mode/json";
-import "brace/theme/monokai";
-import { IEdge } from "../../components/edge";
-import GraphView from "../../components/graph-view";
-import { INode } from "../../components/node";
-import { LayoutEngineType } from "../../utilities/layout-engine/layout-engine-types";
-import BwdlTransformer from "../../utilities/transformers/bwdl-transformer";
-import Sidebar from "../sidebar";
-import GraphConfig, { NODE_KEY } from "./bwdl-config"; // Configures node/edge types
-import bwdlExample from "./bwdl-example-data";
-import BwdlNodeForm from "./bwdl-node-form";
+import * as React from 'react';
+import * as AceEditor from 'react-ace';
+import 'brace/mode/json';
+import 'brace/theme/monokai';
+import { IEdge } from '../../components/edge';
+import GraphView from '../../components/graph-view';
+import { INode } from '../../components/node';
+import { LayoutEngineType } from '../../utilities/layout-engine/layout-engine-types';
+import BwdlTransformer from '../../utilities/transformers/bwdl-transformer';
+import Sidebar from '../sidebar';
+import GraphConfig, { NODE_KEY } from './bwdl-config'; // Configures node/edge types
+import bwdlExample from './bwdl-example-data';
+import BwdlNodeForm from './bwdl-node-form';
 
 type IBwdlState = {
   nodes: INode[];
@@ -52,10 +52,10 @@ class Bwdl extends React.Component<{}, IBwdlState> {
       bwdlText: JSON.stringify(bwdlExample, null, 2),
       copiedNode: null,
       edges: transformed.edges,
-      layoutEngineType: "VerticalTree",
+      layoutEngineType: 'VerticalTree',
       nodes: transformed.nodes,
       selected: null,
-      selectedBwdlNode: null
+      selectedBwdlNode: null,
     };
   }
 
@@ -64,7 +64,7 @@ class Bwdl extends React.Component<{}, IBwdlState> {
 
     this.setState({
       edges: transformed.edges,
-      nodes: transformed.nodes
+      nodes: transformed.nodes,
     });
   };
 
@@ -73,7 +73,7 @@ class Bwdl extends React.Component<{}, IBwdlState> {
     const bwdlText = value;
 
     this.setState({
-      bwdlText
+      bwdlText,
     });
 
     try {
@@ -83,7 +83,7 @@ class Bwdl extends React.Component<{}, IBwdlState> {
     }
 
     this.setState({
-      bwdlJson: input
+      bwdlJson: input,
     });
 
     this.updateBwdl();
@@ -92,7 +92,7 @@ class Bwdl extends React.Component<{}, IBwdlState> {
   onSelectNode = (node: INode | null) => {
     this.setState({
       selected: node,
-      selectedBwdlNode: node ? this.state.bwdlJson.States[node.title] : null
+      selectedBwdlNode: node ? this.state.bwdlJson.States[node.title] : null,
     });
   };
 
@@ -120,7 +120,7 @@ class Bwdl extends React.Component<{}, IBwdlState> {
 
   renderLeftSidebar() {
     return (
-      <Sidebar direction="left" size={"100%"}>
+      <Sidebar direction="left" size={'100%'}>
         <div>
           <AceEditor
             mode="json"
@@ -136,7 +136,7 @@ class Bwdl extends React.Component<{}, IBwdlState> {
             showGutter={true}
             setOptions={{
               showLineNumbers: true,
-              tabSize: 2
+              tabSize: 2,
             }}
             value={this.state.bwdlText}
           />

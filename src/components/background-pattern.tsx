@@ -14,13 +14,13 @@
   limitations under the License.
 */
 
-import * as React from "react";
-import Circle from "./circle";
+import * as React from 'react';
+import Circle from './circle';
 
-type IBackgroundPatternProps = {
+interface IBackgroundPatternProps {
   gridSpacing?: number;
   gridDotSize?: number;
-};
+}
 
 class BackgroundPattern extends React.Component<IBackgroundPatternProps> {
   render() {

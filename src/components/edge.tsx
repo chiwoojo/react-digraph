@@ -14,15 +14,15 @@
   limitations under the License.
 */
 
-import * as d3 from "d3";
-import * as React from "react";
-import { intersect, shape } from "svg-intersections";
-import { Point2D, Matrix2D } from "kld-affine";
-import { Intersection } from "kld-intersections";
-import GraphUtils from "../utilities/graph-util";
-import { INode } from "./node";
+import * as d3 from 'd3';
+import * as React from 'react';
+import { intersect, shape } from 'svg-intersections';
+import { Point2D, Matrix2D } from 'kld-affine';
+import { Intersection } from 'kld-intersections';
+import GraphUtils from '../utilities/graph-util';
+import { INode } from './node';
 
-export type IEdge = {
+export interface IEdge {
   source: string;
   target: string;
   type?: string;
@@ -31,14 +31,14 @@ export type IEdge = {
   label_from?: string;
   label_to?: string;
   [key: string]: any;
-};
+}
 
-export type ITargetPosition = {
+export interface ITargetPosition {
   x: number;
   y: number;
-};
+}
 
-type IEdgeProps = {
+interface IEdgeProps {
   data: IEdge;
   edgeTypes: any; // TODO: create an edgeTypes interface,
   edgeHandleSize?: number;
@@ -48,14 +48,14 @@ type IEdgeProps = {
   isSelected: boolean;
   nodeKey: string;
   viewWrapperElem: HTMLDivElement;
-  rotateEdgeHandle: true;
-};
+  rotateEdgeHandle: boolean;
+}
 
 class Edge extends React.Component<IEdgeProps> {
   static defaultProps = {
     edgeHandleSize: 50,
     isSelected: false,
-    rotateEdgeHandle: true
+    rotateEdgeHandle: true,
   };
 
   static getTheta(pt1: any, pt2: any) {
@@ -101,25 +101,25 @@ class Edge extends React.Component<IEdgeProps> {
   static parsePathToXY(edgePathElement: Element | null) {
     const response = {
       source: { x: 0, y: 0 },
-      target: { x: 0, y: 0 }
+      target: { x: 0, y: 0 },
     };
 
     if (edgePathElement) {
-      let d = edgePathElement.getAttribute("d");
+      let d = edgePathElement.getAttribute('d');
 
-      d = d && d.replace(/^M/, "");
-      d = d && d.replace(/L/, ",");
-      let dArr = (d && d.split(",")) || [];
+      d = d && d.replace(/^M/, '');
+      d = d && d.replace(/L/, ',');
+      const dArr: string[] = (d && d.split(',')) || [];
 
-      dArr = dArr.map(dimension => {
+      const dArrNum = dArr.map(dimension => {
         return parseFloat(dimension);
       });
 
       if (dArr.length === 4) {
-        response.source.x = dArr[0];
-        response.source.y = dArr[1];
-        response.target.x = dArr[2];
-        response.target.y = dArr[3];
+        response.source.x = dArrNum[0];
+        response.source.y = dArrNum[1];
+        response.target.x = dArrNum[2];
+        response.target.y = dArrNum[3];
       }
     }
 
@@ -131,12 +131,12 @@ class Edge extends React.Component<IEdgeProps> {
       xOff: 0,
       yOff: 0,
       intersect: {
-        type: "none",
+        type: 'none',
         point: {
           x: 0,
-          y: 0
-        }
-      }
+          y: 0,
+        },
+      },
     };
   }
 
@@ -151,8 +151,8 @@ class Edge extends React.Component<IEdgeProps> {
     const arrowSize = Edge.getArrowSize(viewWrapperElem);
     const clientRect = defSvgRotatedRectElement.getBoundingClientRect();
 
-    const widthAttr = defSvgRotatedRectElement.getAttribute("width");
-    const heightAttr = defSvgRotatedRectElement.getAttribute("height");
+    const widthAttr = defSvgRotatedRectElement.getAttribute('width');
+    const heightAttr = defSvgRotatedRectElement.getAttribute('height');
     const w = widthAttr ? parseFloat(widthAttr) : clientRect.width;
     const h = heightAttr ? parseFloat(heightAttr) : clientRect.height;
     const trgX = trg.x || 0;
@@ -165,12 +165,12 @@ class Edge extends React.Component<IEdgeProps> {
     const left = trgX - w / 2;
     const right = trgX + w / 2;
 
-    const line = shape("line", { x1: srcX, y1: srcY, x2: trgX, y2: trgY });
+    const line = shape('line', { x1: srcX, y1: srcY, x2: trgX, y2: trgY });
 
     // define rectangle
     const rect = {
       topLeft: new Point2D(left, top),
-      bottomRight: new Point2D(right, bottom)
+      bottomRight: new Point2D(right, bottom),
     };
 
     // convert rectangle corners to polygon (list of points)
@@ -178,22 +178,22 @@ class Edge extends React.Component<IEdgeProps> {
       rect.topLeft,
       new Point2D(rect.bottomRight.x, rect.topLeft.y),
       rect.bottomRight,
-      new Point2D(rect.topLeft.x, rect.bottomRight.y)
+      new Point2D(rect.topLeft.x, rect.bottomRight.y),
     ];
 
     // find center point of rectangle
     const center = rect.topLeft.lerp(rect.bottomRight, 0.5);
 
     // get the rotation
-    const transform = defSvgRotatedRectElement.getAttribute("transform");
+    const transform = defSvgRotatedRectElement.getAttribute('transform');
     let rotate = transform
-      ? transform.replace(/(rotate.[0-9]*.)|[^]/g, "$1")
+      ? transform.replace(/(rotate.[0-9]*.)|[^]/g, '$1')
       : null;
     let angle = 0;
 
     if (rotate) {
       // get the number
-      rotate = rotate.replace(/^rotate\(|\)$/g, "");
+      rotate = rotate.replace(/^rotate\(|\)$/g, '');
       // define rotation in radians
       angle = (parseFloat(rotate) * Math.PI) / 180.0;
     }
@@ -266,7 +266,7 @@ class Edge extends React.Component<IEdgeProps> {
     const right = trgX + w / 2;
 
     // modify the d property to add top and left to the x and y positions
-    let d = defSvgPathElement.getAttribute("d");
+    let d = defSvgPathElement.getAttribute('d');
 
     if (!/^M/.test(d)) {
       // doesn't look like what we expect.
@@ -274,28 +274,28 @@ class Edge extends React.Component<IEdgeProps> {
       return;
     }
 
-    d = d.replace(/^M /, "");
+    d = d.replace(/^M /, '');
     let dArr = d.split(/[ ,]+/);
 
     dArr = dArr.map((val, index) => {
       let isEnd = false;
 
       if (/Z$/.test(val)) {
-        val = val.replace(/Z$/, "");
+        val = val.replace(/Z$/, '');
         isEnd = true;
       }
 
       // index % 2 are x positions
       if (index % 2 === 0) {
-        return parseFloat(val) + left + (isEnd ? "Z" : "");
+        return parseFloat(val) + left + (isEnd ? 'Z' : '');
       }
 
-      return parseFloat(val) + top + (isEnd ? "Z" : "");
+      return parseFloat(val) + top + (isEnd ? 'Z' : '');
     });
 
     const pathIntersect = intersect(
-      shape("path", { d: "M " + dArr.join(" ") }),
-      shape("line", { x1: srcX, y1: srcY, x2: trgX, y2: trgY })
+      shape('path', { d: 'M ' + dArr.join(' ') }),
+      shape('line', { x1: srcX, y1: srcY, x2: trgX, y2: trgY })
     );
 
     if (pathIntersect.points.length > 0) {
@@ -352,8 +352,8 @@ class Edge extends React.Component<IEdgeProps> {
     const arrowHeight = arrowSize.height;
     const clientRect = defSvgCircleElement.getBoundingClientRect();
     const parentElement = defSvgCircleElement.parentElement;
-    let parentWidth = parentElement.getAttribute("width");
-    let parentHeight = parentElement.getAttribute("width");
+    let parentWidth = parentElement.getAttribute('width');
+    let parentHeight = parentElement.getAttribute('width');
 
     if (parentWidth) {
       parentWidth = parseFloat(parentWidth);
@@ -377,13 +377,13 @@ class Edge extends React.Component<IEdgeProps> {
     // Note: even though this is a circle function, we can use ellipse
     // because all circles are ellipses but not all ellipses are circles.
     const pathIntersect = intersect(
-      shape("ellipse", {
+      shape('ellipse', {
         rx: offX,
         ry: offY,
         cx: trgX,
-        cy: trgY
+        cy: trgY,
       }),
-      shape("line", { x1: srcX, y1: srcY, x2: trgX, y2: trgY })
+      shape('line', { x1: srcX, y1: srcY, x2: trgX, y2: trgY })
     );
 
     if (pathIntersect.points.length > 0) {
@@ -404,7 +404,7 @@ class Edge extends React.Component<IEdgeProps> {
     trg: any,
     nodeKey: string,
     includesArrow: boolean = true,
-    viewWrapperElem: HTMLDivElement = document
+    viewWrapperElem: HTMLDivElement | HTMLDocument = document
   ) {
     let response = Edge.getDefaultIntersectResponse();
 
@@ -429,8 +429,8 @@ class Edge extends React.Component<IEdgeProps> {
     }
 
     const xlinkHref = trgNode.getAttributeNS(
-      "http://www.w3.org/1999/xlink",
-      "href"
+      'http://www.w3.org/1999/xlink',
+      'href'
     );
 
     if (!xlinkHref) {
@@ -468,7 +468,7 @@ class Edge extends React.Component<IEdgeProps> {
           trg,
           includesArrow,
           viewWrapperElem
-        )
+        ),
       };
     } else if (defSvgPathElement) {
       // it's a complex path
@@ -480,7 +480,7 @@ class Edge extends React.Component<IEdgeProps> {
           trg,
           includesArrow,
           viewWrapperElem
-        )
+        ),
       };
     } else {
       // it's a circle or some other type
@@ -492,7 +492,7 @@ class Edge extends React.Component<IEdgeProps> {
           trg,
           includesArrow,
           viewWrapperElem
-        )
+        ),
       };
     }
 
@@ -509,7 +509,7 @@ class Edge extends React.Component<IEdgeProps> {
     return null;
   }
 
-  edgeOverlayRef: React.RefObject<typeof Edge>;
+  edgeOverlayRef: React.RefObject<SVGPathElement>;
 
   constructor(props: IEdgeProps) {
     super(props);
@@ -521,9 +521,9 @@ class Edge extends React.Component<IEdgeProps> {
 
     let pathDescription = this.getPathDescription(data);
 
-    pathDescription = pathDescription.replace(/^M/, "");
-    pathDescription = pathDescription.replace(/L/, ",");
-    const pathDescriptionArr = pathDescription.split(",");
+    pathDescription = pathDescription.replace(/^M/, '');
+    pathDescription = pathDescription.replace(/L/, ',');
+    const pathDescriptionArr = pathDescription.split(',');
 
     // [0] = src x, [1] = src y
     // [2] = trg x, [3] = trg y
@@ -565,7 +565,7 @@ class Edge extends React.Component<IEdgeProps> {
     const translation = this.getEdgeHandleTranslation();
     const rotation = this.props.rotateEdgeHandle
       ? this.getEdgeHandleRotation()[0]
-      : "";
+      : '';
     const offset = this.getEdgeHandleOffsetTranslation();
 
     return `${translation} ${rotation} ${offset}`;
@@ -577,7 +577,7 @@ class Edge extends React.Component<IEdgeProps> {
       targetNode,
       nodeKey,
       nodeSize,
-      viewWrapperElem
+      viewWrapperElem,
     } = this.props;
     const trgX = targetNode && targetNode.x ? targetNode.x : 0;
     const trgY = targetNode && targetNode.y ? targetNode.y : 0;
@@ -609,12 +609,12 @@ class Edge extends React.Component<IEdgeProps> {
     const linePoints = [
       {
         x: srcX - srcOff.xOff,
-        y: srcY - srcOff.yOff
+        y: srcY - srcOff.yOff,
       },
       {
         x: trgX - trgOff.xOff,
-        y: trgY - trgOff.yOff
-      }
+        y: trgY - trgOff.yOff,
+      },
     ];
 
     return Edge.lineFunction(linePoints);
@@ -644,7 +644,7 @@ class Edge extends React.Component<IEdgeProps> {
         className="edge-text"
         textAnchor="middle"
         alignmentBaseline="central"
-        style={{ fontSize: "11px", stroke: "none", fill: "black" }}
+        style={{ fontSize: '11px', stroke: 'none', fill: 'black' }}
         transform={`${this.getEdgeHandleTranslation()} ${rotation} translate(0,-5)`}
       >
         {title}
@@ -659,12 +659,13 @@ class Edge extends React.Component<IEdgeProps> {
       return null;
     }
 
-    const id = `${data.source || ""}_${data.target}`;
-    const className = GraphUtils.classNames("edge", {
-      selected: this.props.isSelected
+    const id = `${data.source || ''}_${data.target}`;
+    const className = GraphUtils.classNames('edge', {
+      selected: this.props.isSelected,
     });
     const edgeHandleTransformation = this.getEdgeHandleTransformation();
 
+    // @ts-ignore
     return (
       <g
         className="edge-container"
@@ -688,6 +689,7 @@ class Edge extends React.Component<IEdgeProps> {
         </g>
         <g className="edge-mouse-handler">
           <title>{data.handleTooltipText}</title>
+          {/* @ts-ignore */}
           <path
             className="edge-overlay-path"
             ref={this.edgeOverlayRef}

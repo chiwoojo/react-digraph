@@ -18,26 +18,27 @@
   Zoom slider and zoom to fit controls for GraphView
 */
 
-import React, { MouseEvent } from "react";
-import Parse from "html-react-parser";
-import faExpand from "@fortawesome/fontawesome-free/svgs/solid/expand.svg";
+import * as React from 'react';
+import { MouseEvent } from 'react';
+import Parse from 'html-react-parser';
+// @ts-ignore - Cannot get definitions for specific SVGs.
+import faExpand from '@fortawesome/fontawesome-free/svgs/solid/expand.svg';
 
 const steps = 100; // Slider steps
 const parsedIcon = Parse(faExpand); //  parse SVG once
-const ExpandIcon = () => parsedIcon; // convert SVG to react component
 
-type IGraphControlProps = {
+interface IGraphControlProps {
   maxZoom?: number;
   minZoom?: number;
   zoomLevel: number;
   zoomToFit: (event: MouseEvent<HTMLButtonElement>) => void;
   modifyZoom: (delta: number) => boolean;
-};
+}
 
 class GraphControls extends React.Component<IGraphControlProps> {
   static defaultProps = {
     maxZoom: 1.5,
-    minZoom: 0.15
+    minZoom: 0.15,
   };
 
   // Convert slider val (0-steps) to original zoom value range
@@ -87,7 +88,7 @@ class GraphControls extends React.Component<IGraphControlProps> {
           className="slider-button"
           onMouseDown={this.props.zoomToFit}
         >
-          <ExpandIcon />
+          {parsedIcon}
         </button>
       </div>
     );

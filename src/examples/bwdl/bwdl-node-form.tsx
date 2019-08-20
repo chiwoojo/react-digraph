@@ -14,7 +14,7 @@
   limitations under the License.
 */
 
-import * as React from "react";
+import * as React from 'react';
 
 type IBwdlNodeFormProps = {
   bwdlNode: any;
@@ -62,11 +62,11 @@ class BwdlNodeForm extends React.Component<IBwdlNodeFormProps> {
       return (
         <div key={index} className="choices">
           {Object.keys(choice).map(choiceOption => {
-            if (choiceOption === "Next") {
+            if (choiceOption === 'Next') {
               // "Next" option
               return (
                 <div key={choiceOption}>
-                  <label>Next:</label>{" "}
+                  <label>Next:</label>{' '}
                   {this.renderNextOptions(choice[choiceOption])}
                 </div>
               );
@@ -74,7 +74,7 @@ class BwdlNodeForm extends React.Component<IBwdlNodeFormProps> {
               // "And" array
               return (
                 <div key={choiceOption}>
-                  <label>{choiceOption}:</label>{" "}
+                  <label>{choiceOption}:</label>{' '}
                   {this.renderAndObjectArray(choice[choiceOption])}
                 </div>
               );
@@ -93,21 +93,21 @@ class BwdlNodeForm extends React.Component<IBwdlNodeFormProps> {
   }
 
   renderKey(key: string, value: any) {
-    if (key === "Next") {
+    if (key === 'Next') {
       return this.renderNextOptions(value);
-    } else if (key === "Choices") {
+    } else if (key === 'Choices') {
       return this.renderChoicesOptions(value);
     } else if (
-      typeof value === "string" ||
-      typeof value === "number" ||
-      typeof value === "boolean"
+      typeof value === 'string' ||
+      typeof value === 'number' ||
+      typeof value === 'boolean'
     ) {
       return value;
-    } else if (typeof value === "object" && !Array.isArray(value)) {
+    } else if (typeof value === 'object' && !Array.isArray(value)) {
       return Object.keys(value).map(valueKey => {
         return (
           <div key={valueKey} className="node-property node-sub-property">
-            <label>{valueKey}:</label>{" "}
+            <label>{valueKey}:</label>{' '}
             {this.renderKey(valueKey, value[valueKey])}
           </div>
         );

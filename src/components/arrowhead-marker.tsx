@@ -14,15 +14,15 @@
   limitations under the License.
 */
 
-import * as React from "react";
+import * as React from 'react';
 
-type IArrowheadMarkerProps = {
+interface IArrowheadMarkerProps {
   edgeArrowSize?: number;
-};
+}
 
 class ArrowheadMarker extends React.Component<IArrowheadMarkerProps> {
   static defaultProps = {
-    edgeArrowSize: 8
+    edgeArrowSize: 8,
   };
 
   render() {

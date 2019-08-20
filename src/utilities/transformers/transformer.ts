@@ -14,13 +14,13 @@
   limitations under the License.
 */
 
-import { IEdge } from "../../components/edge";
-import { INode } from "../../components/node";
+import { IEdge } from '../../components/edge';
+import { INode } from '../../components/node';
 
-export type IGraphInput = {
+export interface IGraphInput {
   nodes: INode[];
   edges: IEdge[];
-};
+}
 
 export default class Transformer {
   /**
@@ -31,7 +31,7 @@ export default class Transformer {
   static transform(input: any): IGraphInput {
     return {
       edges: [],
-      nodes: []
+      nodes: [],
     };
   }
 

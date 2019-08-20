@@ -18,14 +18,10 @@
   Example usage of GraphView component
 */
 
-import * as React from "react";
-
-import {
-  GraphViewFast,
-  IEdgeType as IEdge,
-  INodeType as INode,
-  LayoutEngineType
-} from "../../";
+import * as React from 'react';
+import { MouseEvent, SyntheticEvent } from 'react';
+import { GraphViewFast, IEdgeType as IEdge, INodeType as INode } from '../../';
+import { LayoutEngineType } from '../../utilities/layout-engine/layout-engine-types';
 import GraphConfig, {
   edgeTypes,
   EMPTY_EDGE_TYPE,
@@ -36,13 +32,14 @@ import GraphConfig, {
   SPECIAL_CHILD_SUBTYPE,
   SPECIAL_EDGE_TYPE,
   SPECIAL_TYPE,
-  SKINNY_TYPE
-} from "./graph-config"; // Configures node/edge types
+  SKINNY_TYPE,
+} from './graph-config';
+import LayoutEngine from '../../utilities/layout-engine/layout-engine'; // Configures node/edge types
 
-type IGraph = {
+interface IGraph {
   nodes: INode[];
   edges: IEdge[];
-};
+}
 
 // NOTE: Edges must have 'source' & 'target' attributes
 // In a more realistic use case, the graph would probably originate
@@ -50,123 +47,123 @@ type IGraph = {
 const sample: IGraph = {
   edges: [
     {
-      handleText: "5",
-      source: "start1",
-      target: "a1",
-      type: SPECIAL_EDGE_TYPE
+      handleText: '5',
+      source: 'start1',
+      target: 'a1',
+      type: SPECIAL_EDGE_TYPE,
     },
     {
-      handleText: "5",
-      source: "a1",
-      target: "a2",
-      type: SPECIAL_EDGE_TYPE
+      handleText: '5',
+      source: 'a1',
+      target: 'a2',
+      type: SPECIAL_EDGE_TYPE,
     },
     {
-      handleText: "54",
-      source: "a2",
-      target: "a4",
-      type: EMPTY_EDGE_TYPE
+      handleText: '54',
+      source: 'a2',
+      target: 'a4',
+      type: EMPTY_EDGE_TYPE,
     },
     {
-      handleText: "54",
-      source: "a1",
-      target: "a3",
-      type: EMPTY_EDGE_TYPE
+      handleText: '54',
+      source: 'a1',
+      target: 'a3',
+      type: EMPTY_EDGE_TYPE,
     },
     {
-      handleText: "54",
-      source: "a3",
-      target: "a4",
-      type: EMPTY_EDGE_TYPE
+      handleText: '54',
+      source: 'a3',
+      target: 'a4',
+      type: EMPTY_EDGE_TYPE,
     },
     {
-      handleText: "54",
-      source: "a1",
-      target: "a5",
-      type: EMPTY_EDGE_TYPE
+      handleText: '54',
+      source: 'a1',
+      target: 'a5',
+      type: EMPTY_EDGE_TYPE,
     },
     {
-      handleText: "54",
-      source: "a4",
-      target: "a1",
-      type: EMPTY_EDGE_TYPE
+      handleText: '54',
+      source: 'a4',
+      target: 'a1',
+      type: EMPTY_EDGE_TYPE,
     },
     {
-      handleText: "54",
-      source: "a1",
-      target: "a6",
-      type: EMPTY_EDGE_TYPE
+      handleText: '54',
+      source: 'a1',
+      target: 'a6',
+      type: EMPTY_EDGE_TYPE,
     },
     {
-      handleText: "24",
-      source: "a1",
-      target: "a7",
-      type: EMPTY_EDGE_TYPE
-    }
+      handleText: '24',
+      source: 'a1',
+      target: 'a7',
+      type: EMPTY_EDGE_TYPE,
+    },
   ],
   nodes: [
     {
-      id: "start1",
-      title: "Start (0)",
-      type: SPECIAL_TYPE
+      id: 'start1',
+      title: 'Start (0)',
+      type: SPECIAL_TYPE,
     },
     {
-      id: "a1",
-      title: "Node A (1)",
+      id: 'a1',
+      title: 'Node A (1)',
       type: SPECIAL_TYPE,
       x: 258.3976135253906,
-      y: 331.9783248901367
+      y: 331.9783248901367,
     },
     {
-      id: "a2",
+      id: 'a2',
       subtype: SPECIAL_CHILD_SUBTYPE,
-      title: "Node B (2)",
+      title: 'Node B (2)',
       type: EMPTY_TYPE,
       x: 593.9393920898438,
-      y: 260.6060791015625
+      y: 260.6060791015625,
     },
     {
-      id: "a3",
-      title: "Node C (3)",
+      id: 'a3',
+      title: 'Node C (3)',
       type: EMPTY_TYPE,
       x: 237.5757598876953,
-      y: 61.81818389892578
+      y: 61.81818389892578,
     },
     {
-      id: "a4",
-      title: "Node D (4)",
+      id: 'a4',
+      title: 'Node D (4)',
       type: EMPTY_TYPE,
       x: 600.5757598876953,
-      y: 600.81818389892578
+      y: 600.81818389892578,
     },
     {
-      id: "a5",
-      title: "Node E (5)",
+      id: 'a5',
+      title: 'Node E (5)',
       type: null,
       x: 50.5757598876953,
-      y: 500.81818389892578
+      y: 500.81818389892578,
     },
     {
-      id: "a6",
-      title: "Node E (6)",
+      id: 'a6',
+      title: 'Node E (6)',
       type: SKINNY_TYPE,
       x: 300,
-      y: 600
+      y: 600,
     },
     {
-      id: "a7",
-      title: "Node F (7)",
+      id: 'a7',
+      title: 'Node F (7)',
       type: POLY_TYPE,
       x: 0,
-      y: 300
-    }
-  ]
+      y: 300,
+    },
+  ],
 };
 
 function generateSample(totalNodes) {
   const generatedSample: IGraph = {
     edges: [],
-    nodes: []
+    nodes: [],
   };
   let y = 0;
   let x = 0;
@@ -190,7 +187,7 @@ function generateSample(totalNodes) {
       title: `Node ${i}`,
       type: nodeTypes[Math.floor(nodeTypes.length * Math.random())],
       x: 0 + 200 * x,
-      y: 0 + 200 * y
+      y: 0 + 200 * y,
     });
   }
   // link each node to another node
@@ -198,22 +195,22 @@ function generateSample(totalNodes) {
     generatedSample.edges.push({
       source: `a${i}`,
       target: `a${i + 1}`,
-      type: edgeTypes[Math.floor(edgeTypes.length * Math.random())]
+      type: edgeTypes[Math.floor(edgeTypes.length * Math.random())],
     });
   }
 
   return generatedSample;
 }
 
-type IGraphProps = {};
+interface IGraphProps {}
 
-type IGraphState = {
+interface IGraphState {
   graph: any;
   selected: any;
   totalNodes: number;
   copiedNode: any;
   layoutEngineType?: LayoutEngineType;
-};
+}
 
 class Graph extends React.Component<IGraphProps, IGraphState> {
   GraphView;
@@ -226,7 +223,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
       graph: sample,
       layoutEngineType: undefined,
       selected: null,
-      totalNodes: sample.nodes.length
+      totalNodes: sample.nodes.length,
     };
 
     this.GraphView = React.createRef();
@@ -275,15 +272,15 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
     graph.nodes = [
       {
         id: Date.now(),
-        title: "Node A",
+        title: 'Node A',
         type: SPECIAL_TYPE,
         x: 0,
-        y: 0
+        y: 0,
       },
-      ...this.state.graph.nodes
+      ...this.state.graph.nodes,
     ];
     this.setState({
-      graph
+      graph,
     });
   };
   deleteStartNode = () => {
@@ -294,14 +291,14 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
     // this will force a re-render
     graph.nodes = [...this.state.graph.nodes];
     this.setState({
-      graph
+      graph,
     });
   };
 
   handleChange = (event: any) => {
     this.setState(
       {
-        totalNodes: parseInt(event.target.value || "0", 10)
+        totalNodes: parseInt(event.target.value || '0', 10),
       },
       this.makeItLarge
     );
@@ -344,10 +341,10 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
 
     const viewNode = {
       id: Date.now(),
-      title: "",
+      title: '',
       type,
       x,
-      y
+      y,
     };
 
     graph.nodes = [...graph.nodes, viewNode];
@@ -383,7 +380,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
     const viewEdge = {
       source: sourceViewNode[NODE_KEY],
       target: targetViewNode[NODE_KEY],
-      type
+      type,
     };
 
     // Only add the edge when the source node is not the same as the target
@@ -391,7 +388,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
       graph.edges = [...graph.edges, viewEdge];
       this.setState({
         graph,
-        selected: viewEdge
+        selected: viewEdge,
       });
     }
   };
@@ -414,7 +411,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
 
     this.setState({
       graph,
-      selected: edge
+      selected: edge,
     });
   };
 
@@ -425,13 +422,13 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
     graph.edges = edges;
     this.setState({
       graph,
-      selected: null
+      selected: null,
     });
   };
 
   onUndo = () => {
     // Not implemented
-    console.warn("Undo is not currently implemented in the example.");
+    console.warn('Undo is not currently implemented in the example.');
     // Normally any add, remove, or update would record the action in an array.
     // In order to undo it one would simply call the inverse of the action performed. For instance, if someone
     // called onDeleteEdge with (viewEdge, i, edges) then an undelete would be a splicing the original viewEdge
@@ -440,7 +437,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
 
   onCopySelected = () => {
     if (this.state.selected.source) {
-      console.warn("Cannot copy selected edges, try selecting a node instead.");
+      console.warn('Cannot copy selected edges, try selecting a node instead.');
 
       return;
     }
@@ -449,14 +446,14 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
     const y = this.state.selected.y + 10;
 
     this.setState({
-      copiedNode: { ...this.state.selected, x, y }
+      copiedNode: { ...this.state.selected, x, y },
     });
   };
 
   onPasteSelected = () => {
     if (!this.state.copiedNode) {
       console.warn(
-        "No node is currently in the copy queue. Try selecting a node and copying it with Ctrl/Command-C"
+        'No node is currently in the copy queue. Try selecting a node and copying it with Ctrl/Command-C'
       );
     }
 
@@ -467,9 +464,12 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
     this.forceUpdate();
   };
 
-  handleChangeLayoutEngineType = (event: any) => {
+  handleChangeLayoutEngineType = (event: SyntheticEvent<HTMLSelectElement>) => {
+    const layout = (event.target as HTMLSelectElement)
+      .value as LayoutEngineType;
+
     this.setState({
-      layoutEngineType: event.target.value as LayoutEngineType | "None"
+      layoutEngineType: layout,
     });
   };
 
@@ -506,8 +506,8 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
               onChange={this.handleChangeLayoutEngineType}
             >
               <option value={undefined}>None</option>
-              <option value={"SnapToGrid"}>Snap to Grid</option>
-              <option value={"VerticalTree"}>Vertical Tree</option>
+              <option value={'SnapToGrid'}>Snap to Grid</option>
+              <option value={'VerticalTree'}>Vertical Tree</option>
             </select>
           </div>
           <div className="pan-list">

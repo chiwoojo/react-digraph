@@ -14,29 +14,29 @@
   limitations under the License.
 */
 
-import * as React from "react";
-import GraphUtils from "../utilities/graph-util";
+import * as React from 'react';
+import GraphUtils from '../utilities/graph-util';
 
-type ISidebarProps = {
+interface ISidebarProps {
   children: any;
-  direction: "left" | "right" | "up" | "down";
+  direction: 'left' | 'right' | 'up' | 'down';
   size: number | string;
-};
+}
 
-type ISidebarState = {
+interface ISidebarState {
   sidebarClass?: string | null;
-};
+}
 
 const sidebarClass = {
-  CLOSED: "closed",
-  OPEN: "open"
+  CLOSED: 'closed',
+  OPEN: 'open',
 };
 
 const directionOpposites = {
-  down: "up",
-  left: "right",
-  right: "left",
-  up: "down"
+  down: 'up',
+  left: 'right',
+  right: 'left',
+  up: 'down',
 };
 
 export default class Sidebar extends React.Component<
@@ -44,14 +44,14 @@ export default class Sidebar extends React.Component<
   ISidebarState
 > {
   static defaultProps = {
-    direction: "left",
-    size: "130px"
+    direction: 'left',
+    size: '130px',
   };
 
   constructor(props: ISidebarProps) {
     super(props);
     this.state = {
-      sidebarClass: sidebarClass.OPEN
+      sidebarClass: sidebarClass.OPEN,
     };
   }
 
@@ -64,20 +64,20 @@ export default class Sidebar extends React.Component<
     }
 
     this.setState({
-      sidebarClass: newValue
+      sidebarClass: newValue,
     });
   };
 
   getContainerClasses(): string {
-    const classes = ["sidebar-main-container"];
+    const classes = ['sidebar-main-container'];
 
-    classes.push(this.state.sidebarClass || "");
+    classes.push(this.state.sidebarClass || '');
 
     return GraphUtils.classNames(classes);
   }
 
   getContainerStyle(size: number | string, direction: string) {
-    if (direction === "up" || direction === "down") {
+    if (direction === 'up' || direction === 'down') {
       return { height: `${size}`, maxHeight: `${size}` };
     }
 
@@ -85,7 +85,7 @@ export default class Sidebar extends React.Component<
   }
 
   getArrowIconClasses(direction: string): string {
-    const classes = ["icon"];
+    const classes = ['icon'];
 
     if (this.state.sidebarClass === sidebarClass.CLOSED) {
       classes.push(`icon_${directionOpposites[direction]}-arrow`);
@@ -106,7 +106,7 @@ export default class Sidebar extends React.Component<
 
   render() {
     const { children, direction, size } = this.props;
-    const sidebarClassName = GraphUtils.classNames("sidebar", direction);
+    const sidebarClassName = GraphUtils.classNames('sidebar', direction);
 
     return (
       <div className={sidebarClassName}>

@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+// @ts-ignore - Load config
 import config from '../webpack.prod';
 
 config.plugins.push(new BundleAnalyzerPlugin());

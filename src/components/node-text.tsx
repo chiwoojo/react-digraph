@@ -14,16 +14,16 @@
   limitations under the License.
 */
 
-import * as React from "react";
-import GraphUtils from "../utilities/graph-util";
-import { INode } from "./node";
+import * as React from 'react';
+import GraphUtils from '../utilities/graph-util';
+import { INode } from './node';
 
-type INodeTextProps = {
+interface INodeTextProps {
   data: INode;
   nodeTypes: any; // TODO: create a nodeTypes interface,
   isSelected: boolean;
   maxTitleChars: number;
-};
+}
 
 class NodeText extends React.Component<INodeTextProps> {
   getTypeText(data: INode, nodeTypes: any) {
@@ -40,8 +40,8 @@ class NodeText extends React.Component<INodeTextProps> {
     const { data, nodeTypes, isSelected, maxTitleChars } = this.props;
     const lineOffset = 18;
     const title = data.title;
-    const className = GraphUtils.classNames("node-text", {
-      selected: isSelected
+    const className = GraphUtils.classNames('node-text', {
+      selected: isSelected,
     });
     const typeText = this.getTypeText(data, nodeTypes);
 

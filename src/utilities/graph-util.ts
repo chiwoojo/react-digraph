@@ -14,9 +14,9 @@
   limitations under the License.
 */
 
-import { IEdge } from "../components/edge";
-import { INode } from "../components/node";
-import fastDeepEqual from "fast-deep-equal";
+import { IEdge } from '../components/edge';
+import { INode } from '../components/node';
+import * as fastDeepEqual from 'fast-deep-equal';
 
 export type INodeMapNode = {
   node: INode;
@@ -41,7 +41,7 @@ class GraphUtils {
         node: item,
         originalArrIndex: i,
         outgoingEdges: [],
-        parents: []
+        parents: [],
       };
     }
 
@@ -59,9 +59,9 @@ class GraphUtils {
         continue;
       }
 
-      map[`${item.source || ""}_${item.target}`] = {
+      map[`${item.source || ''}_${item.target}`] = {
         edge: item,
-        originalArrIndex: i
+        originalArrIndex: i,
       };
     }
 
@@ -80,7 +80,7 @@ class GraphUtils {
         continue;
       }
 
-      nodeMapSourceNode = nodesMap[`key-${edge.source || ""}`];
+      nodeMapSourceNode = nodesMap[`key-${edge.source || ''}`];
       nodeMapTargetNode = nodesMap[`key-${edge.target}`];
 
       // avoid an orphaned edge
@@ -116,13 +116,13 @@ class GraphUtils {
   }
 
   static classNames(...args: any[]) {
-    let className = "";
+    let className = '';
 
     for (const arg of args) {
-      if (typeof arg === "string" || typeof arg === "number") {
+      if (typeof arg === 'string' || typeof arg === 'number') {
         className += ` ${arg}`;
       } else if (
-        typeof arg === "object" &&
+        typeof arg === 'object' &&
         !Array.isArray(arg) &&
         arg !== null
       ) {
@@ -132,14 +132,14 @@ class GraphUtils {
           }
         });
       } else if (Array.isArray(arg)) {
-        className += ` ${arg.join(" ")}`;
+        className += ` ${arg.join(' ')}`;
       }
     }
 
     return className.trim();
   }
 
-  static yieldingLoop(count, chunksize, callback, finished) {
+  static yieldingLoop(count, chunksize, callback, finished?) {
     let i = 0;
 
     (function chunk() {

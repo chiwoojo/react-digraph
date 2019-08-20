@@ -14,13 +14,13 @@
   limitations under the License.
 */
 
-import * as d3 from "d3";
-import * as React from "react";
+import * as d3 from 'd3';
+import * as React from 'react';
 // This works in Typescript but causes an import loop for Flowtype. We'll just use `any` below.
 // import { type LayoutEngine } from '../utilities/layout-engine/layout-engine-config';
-import Edge from "./edge";
-import GraphUtils from "../utilities/graph-util";
-import NodeText from "./node-text";
+import Edge from './edge';
+import GraphUtils from '../utilities/graph-util';
+import NodeText from './node-text';
 
 export type IPoint = {
   x: number;
@@ -105,7 +105,7 @@ class Node extends React.Component<INodeProps, INodeState> {
     onNodeUpdate: () => {
       return;
     },
-    centerNodeOnMove: true
+    centerNodeOnMove: true,
   };
 
   static getDerivedStateFromProps(
@@ -115,7 +115,7 @@ class Node extends React.Component<INodeProps, INodeState> {
     return {
       selected: nextProps.isSelected,
       x: nextProps.data.x,
-      y: nextProps.data.y
+      y: nextProps.data.y,
     };
   }
 
@@ -132,7 +132,7 @@ class Node extends React.Component<INodeProps, INodeState> {
       selected: false,
       x: props.data.x || 0,
       y: props.data.y || 0,
-      pointerOffset: null
+      pointerOffset: null,
     };
 
     this.nodeRef = React.createRef();
@@ -141,12 +141,12 @@ class Node extends React.Component<INodeProps, INodeState> {
   componentDidMount() {
     const dragFunction = d3
       .drag()
-      .on("drag", this.handleMouseMove)
-      .on("start", this.handleDragStart)
-      .on("end", this.handleDragEnd);
+      .on('drag', this.handleMouseMove)
+      .on('start', this.handleDragStart)
+      .on('end', this.handleDragEnd);
 
     d3.select(this.nodeRef.current)
-      .on("mouseout", this.handleMouseOut)
+      .on('mouseout', this.handleMouseOut)
       .call(dragFunction);
   }
 
@@ -162,13 +162,13 @@ class Node extends React.Component<INodeProps, INodeState> {
     // While the mouse is down, this function handles all mouse movement
     const newState = {
       x: d3.event.x,
-      y: d3.event.y
+      y: d3.event.y,
     };
 
     if (!this.props.centerNodeOnMove) {
       newState.pointerOffset = this.state.pointerOffset || {
         x: d3.event.x - this.props.data.x,
-        y: d3.event.y - this.props.data.y
+        y: d3.event.y - this.props.data.y,
       };
       newState.x -= newState.pointerOffset.x;
       newState.y -= newState.pointerOffset.y;
@@ -228,7 +228,7 @@ class Node extends React.Component<INodeProps, INodeState> {
     this.setState({
       mouseDown: false,
       drawingEdge: false,
-      pointerOffset: null
+      pointerOffset: null,
     });
 
     if (this.oldSibling && this.oldSibling.parentElement) {
@@ -296,31 +296,31 @@ class Node extends React.Component<INodeProps, INodeState> {
       index,
       nodeTypes,
       nodeSubtypes,
-      nodeKey
+      nodeKey,
     } = this.props;
     const { hovered, selected } = this.state;
     const props = {
       height: this.props.nodeSize || 0,
-      width: this.props.nodeSize || 0
+      width: this.props.nodeSize || 0,
     };
-    const nodeShapeContainerClassName = GraphUtils.classNames("shape");
-    const nodeClassName = GraphUtils.classNames("node", { selected, hovered });
-    const nodeSubtypeClassName = GraphUtils.classNames("subtype-shape", {
-      selected: this.state.selected
+    const nodeShapeContainerClassName = GraphUtils.classNames('shape');
+    const nodeClassName = GraphUtils.classNames('node', { selected, hovered });
+    const nodeSubtypeClassName = GraphUtils.classNames('subtype-shape', {
+      selected: this.state.selected,
     });
-    const nodeTypeXlinkHref = Node.getNodeTypeXlinkHref(data, nodeTypes) || "";
+    const nodeTypeXlinkHref = Node.getNodeTypeXlinkHref(data, nodeTypes) || '';
     const nodeSubtypeXlinkHref =
-      Node.getNodeSubtypeXlinkHref(data, nodeSubtypes) || "";
+      Node.getNodeSubtypeXlinkHref(data, nodeSubtypes) || '';
 
     // get width and height defined on def element
     const defSvgNodeElement: any = nodeTypeXlinkHref
       ? document.querySelector(`defs>${nodeTypeXlinkHref}`)
       : null;
     const nodeWidthAttr = defSvgNodeElement
-      ? defSvgNodeElement.getAttribute("width")
+      ? defSvgNodeElement.getAttribute('width')
       : 0;
     const nodeHeightAttr = defSvgNodeElement
-      ? defSvgNodeElement.getAttribute("height")
+      ? defSvgNodeElement.getAttribute('height')
       : 0;
 
     props.width = nodeWidthAttr ? parseInt(nodeWidthAttr, 10) : props.width;
@@ -364,7 +364,7 @@ class Node extends React.Component<INodeProps, INodeState> {
       nodeTypes,
       renderNodeText,
       isSelected,
-      maxTitleChars
+      maxTitleChars,
     } = this.props;
 
     if (renderNodeText) {
@@ -384,9 +384,9 @@ class Node extends React.Component<INodeProps, INodeState> {
   render() {
     const { x, y, hovered, selected } = this.state;
     const { opacity, id, data } = this.props;
-    const className = GraphUtils.classNames("node", data.type, {
+    const className = GraphUtils.classNames('node', data.type, {
       hovered,
-      selected
+      selected,
     });
 
     return (

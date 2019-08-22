@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,113 +15,147 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
-import GraphUtils from '../../utilities/graph-util';
+      return extendStatics(d, b);
+    };
 
-type ISidebarProps = {
-  children: any,
-  direction: 'left' | 'right' | 'up' | 'down',
-  size: number | string,
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-type ISidebarState = {
-  sidebarClass?: string | null,
-};
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 
+exports.__esModule = true;
+const React = require('react');
+const graph_util_1 = require('../../utilities/graph-util');
 const sidebarClass = {
   CLOSED: 'closed',
   OPEN: 'open',
 };
-
 const directionOpposites = {
   down: 'up',
   left: 'right',
   right: 'left',
   up: 'down',
 };
+const Sidebar = /** @class */ (function(_super) {
+  __extends(Sidebar, _super);
 
-export default class Sidebar extends React.Component<
-  ISidebarProps,
-  ISidebarState
-> {
-  static defaultProps = {
-    direction: 'left',
-    size: '130px',
-  };
+  function Sidebar(props) {
+    const _this = _super.call(this, props) || this;
 
-  constructor(props: ISidebarProps) {
-    super(props);
-    this.state = {
+    _this.toggleContainer = function() {
+      const originalValue = _this.state.sidebarClass;
+      let newValue = sidebarClass.CLOSED;
+
+      if (originalValue === newValue) {
+        newValue = sidebarClass.OPEN;
+      }
+
+      _this.setState({
+        sidebarClass: newValue,
+      });
+    };
+    _this.state = {
       sidebarClass: sidebarClass.OPEN,
     };
+
+    return _this;
   }
-
-  toggleContainer = () => {
-    const originalValue = this.state.sidebarClass;
-    let newValue = sidebarClass.CLOSED;
-
-    if (originalValue === newValue) {
-      newValue = sidebarClass.OPEN;
-    }
-
-    this.setState({
-      sidebarClass: newValue,
-    });
-  };
-
-  getContainerClasses(): string {
+  Sidebar.prototype.getContainerClasses = function() {
     const classes = ['sidebar-main-container'];
 
     classes.push(this.state.sidebarClass || '');
 
-    return GraphUtils.classNames(classes);
-  }
-
-  getContainerStyle(size: number | string, direction: string) {
+    return graph_util_1['default'].classNames(classes);
+  };
+  Sidebar.prototype.getContainerStyle = function(size, direction) {
     if (direction === 'up' || direction === 'down') {
-      return { height: `${size}`, maxHeight: `${size}` };
+      return { height: '' + size, maxHeight: '' + size };
     }
 
-    return { width: `${size}`, maxWidth: `${size}` };
-  }
-
-  getArrowIconClasses(direction: string): string {
+    return { width: '' + size, maxWidth: '' + size };
+  };
+  Sidebar.prototype.getArrowIconClasses = function(direction) {
     const classes = ['icon'];
 
     if (this.state.sidebarClass === sidebarClass.CLOSED) {
-      classes.push(`icon_${directionOpposites[direction]}-arrow`);
+      classes.push('icon_' + directionOpposites[direction] + '-arrow');
     } else {
-      classes.push(`icon_${direction}-arrow`);
+      classes.push('icon_' + direction + '-arrow');
     }
 
-    return GraphUtils.classNames(classes);
-  }
-
-  renderToggleBar(direction: string) {
-    return (
-      <div className="sidebar-toggle-bar" onClick={this.toggleContainer}>
-        <i className={this.getArrowIconClasses(direction)} />
-      </div>
+    return graph_util_1['default'].classNames(classes);
+  };
+  Sidebar.prototype.renderToggleBar = function(direction) {
+    return React.createElement(
+      'div',
+      { className: 'sidebar-toggle-bar', onClick: this.toggleContainer },
+      React.createElement('i', {
+        className: this.getArrowIconClasses(direction),
+      })
     );
-  }
-
-  render() {
-    const { children, direction, size } = this.props;
-    const sidebarClassName = GraphUtils.classNames('sidebar', direction);
-
-    return (
-      <div className={sidebarClassName}>
-        <div
-          className={this.getContainerClasses()}
-          style={this.getContainerStyle(size, direction)}
-        >
-          {children}
-        </div>
-        <div className="sidebar-toggle-bar" onClick={this.toggleContainer}>
-          <i className={this.getArrowIconClasses(direction)} />
-        </div>
-      </div>
+  };
+  Sidebar.prototype.render = function() {
+    const _a = this.props,
+      children = _a.children,
+      direction = _a.direction,
+      size = _a.size;
+    const sidebarClassName = graph_util_1['default'].classNames(
+      'sidebar',
+      direction
     );
-  }
-}
+
+    return React.createElement(
+      'div',
+      { className: sidebarClassName },
+      React.createElement(
+        'div',
+        {
+          className: this.getContainerClasses(),
+          style: this.getContainerStyle(size, direction),
+        },
+        children
+      ),
+      React.createElement(
+        'div',
+        { className: 'sidebar-toggle-bar', onClick: this.toggleContainer },
+        React.createElement('i', {
+          className: this.getArrowIconClasses(direction),
+        })
+      )
+    );
+  };
+  Sidebar.defaultProps = {
+    direction: 'left',
+    size: '130px',
+  };
+
+  return Sidebar;
+})(React.Component);
+
+exports['default'] = Sidebar;

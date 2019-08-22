@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,25 +15,62 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as dagre from 'dagre';
-import { type INode } from '../../components/node';
-import SnapToGrid from './snap-to-grid';
+      return extendStatics(d, b);
+    };
 
-class VerticalTree extends SnapToGrid {
-  adjustNodes(nodes: INode[], nodesMap?: any): INode[] {
-    const {
-      nodeKey,
-      nodeSize,
-      nodeHeight,
-      nodeWidth,
-      nodeSpacingMultiplier,
-    } = this.graphViewProps;
+    return function(d, b) {
+      extendStatics(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
+
+exports.__esModule = true;
+const dagre = require('dagre');
+const snap_to_grid_1 = require('./snap-to-grid');
+const VerticalTree = /** @class */ (function(_super) {
+  __extends(VerticalTree, _super);
+
+  function VerticalTree() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
+  }
+  VerticalTree.prototype.adjustNodes = function(nodes, nodesMap) {
+    const _a = this.graphViewProps,
+      nodeKey = _a.nodeKey,
+      nodeSize = _a.nodeSize,
+      nodeHeight = _a.nodeHeight,
+      nodeWidth = _a.nodeWidth,
+      nodeSpacingMultiplier = _a.nodeSpacingMultiplier;
     const g = new dagre.graphlib.Graph();
 
     g.setGraph({});
-    g.setDefaultEdgeLabel(() => ({}));
-
+    g.setDefaultEdgeLabel(function() {
+      return {};
+    });
     const spacing = nodeSpacingMultiplier || 1.5;
     const size = (nodeSize || 1) * spacing;
     let height;
@@ -46,13 +84,13 @@ class VerticalTree extends SnapToGrid {
       width = nodeWidth * spacing;
     }
 
-    nodes.forEach(node => {
+    nodes.forEach(function(node) {
       if (!nodesMap) {
         return;
       }
 
       const nodeId = node[nodeKey];
-      const nodeKeyId = `key-${nodeId}`;
+      const nodeKeyId = 'key-' + nodeId;
       const nodesMapNode = nodesMap[nodeKeyId];
 
       // prevent disconnected nodes from being part of the graph
@@ -64,16 +102,13 @@ class VerticalTree extends SnapToGrid {
       }
 
       g.setNode(nodeKeyId, { width: width || size, height: height || size });
-      nodesMapNode.outgoingEdges.forEach(edge => {
-        g.setEdge(nodeKeyId, `key-${edge.target}`);
+      nodesMapNode.outgoingEdges.forEach(function(edge) {
+        g.setEdge(nodeKeyId, 'key-' + edge.target);
       });
     });
-
     dagre.layout(g);
-
-    g.nodes().forEach(gNodeId => {
+    g.nodes().forEach(function(gNodeId) {
       const nodesMapNode = nodesMap[gNodeId];
-
       // gNode is the dagre representation
       const gNode = g.node(gNodeId);
 
@@ -82,7 +117,9 @@ class VerticalTree extends SnapToGrid {
     });
 
     return nodes;
-  }
-}
+  };
 
-export default VerticalTree;
+  return VerticalTree;
+})(snap_to_grid_1['default']);
+
+exports['default'] = VerticalTree;

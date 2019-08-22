@@ -1,7 +1,3 @@
-// @flow
+'use strict';
 
-export type LayoutEngineType =
-  | 'None'
-  | 'SnapToGrid'
-  | 'VerticalTree'
-  | 'HorizontalTree';
+exports.__esModule = true;

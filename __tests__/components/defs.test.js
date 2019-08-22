@@ -1,71 +1,62 @@
-// @flow
-
-import * as React from 'react';
-
-import { shallow } from 'enzyme';
-
-import ArrowheadMarker from '../../src/components/arrowhead-marker';
-import BackgroundPattern from '../../src/components/background-pattern';
-import Defs from '../../src/components/defs';
-import DropshadowFilter from '../../src/components/dropshadow-filter';
-
-describe('Circle component', () => {
-  let output;
-  let nodeTypes;
-  let nodeSubtypes;
-  let edgeTypes;
-
-  beforeEach(() => {
-    nodeTypes = {
-      testType: {
-        shape: (<circle id="nodeTypeCircle" />)
-      }
-    };
-    nodeSubtypes = {
-      testSubtype: {
-        shape: (<rect id="nodeSubtypeRect" />)
-      }
-    };
-    edgeTypes = {
-      testEdgeType: {
-        shape: (<path id="edgePath" />)
-      }
-    };
-
-    output = shallow(<Defs nodeTypes={nodeTypes} nodeSubtypes={nodeSubtypes} edgeTypes={edgeTypes} />);
-  });
-
-  describe('render method', () => {
-    it('renders without optional props', () => {
-      expect(output.find('circle').length).toEqual(1);
-      expect(output.find('rect').length).toEqual(1);
-      expect(output.find('path').length).toEqual(1);
-      expect(output.find(ArrowheadMarker).length).toEqual(1);
-      expect(output.find(ArrowheadMarker).props().edgeArrowSize).toEqual(8);
-      expect(output.find(BackgroundPattern).length).toEqual(1);
-      expect(output.find(DropshadowFilter).length).toEqual(1);
+"use strict";
+exports.__esModule = true;
+var React = require("react");
+var enzyme_1 = require("enzyme");
+var arrowhead_marker_1 = require("../../src/components/arrowhead-marker");
+var background_pattern_1 = require("../../src/components/background-pattern");
+var defs_1 = require("../../src/components/defs");
+var dropshadow_filter_1 = require("../../src/components/dropshadow-filter");
+describe("Circle component", function () {
+    var output;
+    var nodeTypes;
+    var nodeSubtypes;
+    var edgeTypes;
+    beforeEach(function () {
+        nodeTypes = {
+            testType: {
+                shape: React.createElement("circle", { id: "nodeTypeCircle" })
+            }
+        };
+        nodeSubtypes = {
+            testSubtype: {
+                shape: React.createElement("rect", { id: "nodeSubtypeRect" })
+            }
+        };
+        edgeTypes = {
+            testEdgeType: {
+                shape: React.createElement("path", { id: "edgePath" })
+            }
+        };
+        output = enzyme_1.shallow(React.createElement(defs_1["default"], { nodeTypes: nodeTypes, nodeSubtypes: nodeSubtypes, edgeTypes: edgeTypes }));
     });
-
-    it('renders with optional props', () => {
-      output.setProps({
-        edgeArrowSize: 4,
-        gridDotSize: 3,
-        gridSpacing: 10
-      });
-      expect(output.find(ArrowheadMarker).props().edgeArrowSize).toEqual(4);
-      expect(output.find(BackgroundPattern).props().gridSpacing).toEqual(10);
-      expect(output.find(BackgroundPattern).props().gridDotSize).toEqual(3);
+    describe("render method", function () {
+        it("renders without optional props", function () {
+            expect(output.find("circle").length).toEqual(1);
+            expect(output.find("rect").length).toEqual(1);
+            expect(output.find("path").length).toEqual(1);
+            expect(output.find(arrowhead_marker_1["default"]).length).toEqual(1);
+            expect(output.find(arrowhead_marker_1["default"]).props().edgeArrowSize).toEqual(8);
+            expect(output.find(background_pattern_1["default"]).length).toEqual(1);
+            expect(output.find(dropshadow_filter_1["default"]).length).toEqual(1);
+        });
+        it("renders with optional props", function () {
+            output.setProps({
+                edgeArrowSize: 4,
+                gridDotSize: 3,
+                gridSpacing: 10
+            });
+            expect(output.find(arrowhead_marker_1["default"]).props().edgeArrowSize).toEqual(4);
+            expect(output.find(background_pattern_1["default"]).props().gridSpacing).toEqual(10);
+            expect(output.find(background_pattern_1["default"]).props().gridDotSize).toEqual(3);
+        });
+        it("uses the renderDefs prop callback", function () {
+            output.setProps({
+                renderDefs: function () {
+                    return React.createElement("ellipse", { id: "renderDefsEllipse" });
+                }
+            });
+            expect(output.find("ellipse").length).toEqual(1);
+            expect(output.find("ellipse").props().id).toEqual("renderDefsEllipse");
+        });
     });
-
-    it('uses the renderDefs prop callback', () => {
-      output.setProps({
-        renderDefs: () => {
-          return (<ellipse id="renderDefsEllipse" />);
-        }
-      });
-
-      expect(output.find('ellipse').length).toEqual(1);
-      expect(output.find('ellipse').props().id).toEqual('renderDefsEllipse');
-    });
-  });
 });

@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,43 +15,84 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
+      return extendStatics(d, b);
+    };
 
-type IArrowheadMarkerProps = {
-  edgeArrowSize?: number,
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-class ArrowheadMarker extends React.Component<IArrowheadMarkerProps> {
-  static defaultProps = {
-    edgeArrowSize: 8,
-  };
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 
-  render() {
-    const { edgeArrowSize } = this.props;
+exports.__esModule = true;
+const React = require('react');
+const ArrowheadMarker = /** @class */ (function(_super) {
+  __extends(ArrowheadMarker, _super);
+
+  function ArrowheadMarker() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
+  }
+  ArrowheadMarker.prototype.render = function() {
+    const edgeArrowSize = this.props.edgeArrowSize;
 
     if (!edgeArrowSize && edgeArrowSize !== 0) {
       return null;
     }
 
-    return (
-      <marker
-        id="end-arrow"
-        key="end-arrow"
-        viewBox={`0 -${edgeArrowSize / 2} ${edgeArrowSize} ${edgeArrowSize}`}
-        refX={`${edgeArrowSize / 2}`}
-        markerWidth={`${edgeArrowSize}`}
-        markerHeight={`${edgeArrowSize}`}
-        orient="auto"
-      >
-        <path
-          className="arrow"
-          d={`M0,-${edgeArrowSize / 2}L${edgeArrowSize},0L0,${edgeArrowSize /
-            2}`}
-        />
-      </marker>
+    return React.createElement(
+      'marker',
+      {
+        id: 'end-arrow',
+        key: 'end-arrow',
+        viewBox:
+          '0 -' + edgeArrowSize / 2 + ' ' + edgeArrowSize + ' ' + edgeArrowSize,
+        refX: '' + edgeArrowSize / 2,
+        markerWidth: '' + edgeArrowSize,
+        markerHeight: '' + edgeArrowSize,
+        orient: 'auto',
+      },
+      React.createElement('path', {
+        className: 'arrow',
+        d:
+          'M0,-' +
+          edgeArrowSize / 2 +
+          'L' +
+          edgeArrowSize +
+          ',0L0,' +
+          edgeArrowSize / 2,
+      })
     );
-  }
-}
+  };
+  ArrowheadMarker.defaultProps = {
+    edgeArrowSize: 8,
+  };
 
-export default ArrowheadMarker;
+  return ArrowheadMarker;
+})(React.Component);
+
+exports['default'] = ArrowheadMarker;

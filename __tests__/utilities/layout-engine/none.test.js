@@ -1,19 +1,14 @@
-
-// @flow
-import * as React from 'react';
-
-import None from '../../../src/utilities/layout-engine/none';
-
-describe('None', () => {
-  let output = null;
-
-  describe('class', () => {
-    it('is defined', () => {
-      expect(None).toBeDefined();
+"use strict";
+exports.__esModule = true;
+var none_1 = require("../../../src/utilities/layout-engine/none");
+describe("None", function () {
+    var output = null;
+    describe("class", function () {
+        it("is defined", function () {
+            expect(none_1["default"]).toBeDefined();
+        });
+        it("instantiates", function () {
+            var blah = new none_1["default"]();
+        });
     });
-
-    it('instantiates', () => {
-      const blah = new None();
-    });
-  });
 });

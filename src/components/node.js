@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,113 +15,197 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as d3 from 'd3';
-import * as React from 'react';
-// This works in Typescript but causes an import loop for Flowtype. We'll just use `any` below.
-// import { type LayoutEngine } from '../utilities/layout-engine/layout-engine-config';
-import Edge from './edge';
-import GraphUtils from '../utilities/graph-util';
-import NodeText from './node-text';
+      return extendStatics(d, b);
+    };
 
-export type IPoint = {
-  x: number,
-  y: number,
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-export type INode = {
-  title: string,
-  x?: number | null,
-  y?: number | null,
-  type?: string | null,
-  subtype?: string | null,
-  [key: string]: any,
-};
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
+var __assign =
+  (this && this.__assign) ||
+  function() {
+    __assign =
+      Object.assign ||
+      function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (const p in s) {
+            if (Object.prototype.hasOwnProperty.call(s, p)) {
+              t[p] = s[p];
+            }
+          }
+        }
 
-type INodeProps = {
-  data: INode,
-  id: string,
-  nodeTypes: any, // TODO: make a nodeTypes interface
-  nodeSubtypes: any, // TODO: make a nodeSubtypes interface
-  opacity?: number,
-  nodeKey: string,
-  nodeSize?: number,
-  onNodeMouseEnter: (event: any, data: any, hovered: boolean) => void,
-  onNodeMouseLeave: (event: any, data: any) => void,
-  onNodeMove: (point: IPoint, id: string, shiftKey: boolean) => void,
-  onNodeSelected: (
-    data: any,
-    id: string,
-    shiftKey: boolean,
-    event?: any
-  ) => void,
-  onNodeUpdate: (point: IPoint, id: string, shiftKey: boolean) => void,
-  renderNode?: (
-    nodeRef: any,
-    data: any,
-    id: string,
-    selected: boolean,
-    hovered: boolean
-  ) => any,
-  renderNodeText?: (data: any, id: string | number, isSelected: boolean) => any,
-  isSelected: boolean,
-  layoutEngine?: any,
-  viewWrapperElem: HTMLDivElement,
-  centerNodeOnMove: boolean,
-  maxTitleChars: number,
-};
+        return t;
+      };
 
-type INodeState = {
-  hovered: boolean,
-  x: number,
-  y: number,
-  selected: boolean,
-  mouseDown: boolean,
-  drawingEdge: boolean,
-  pointerOffset: ?{ x: number, y: number },
-};
-
-class Node extends React.Component<INodeProps, INodeState> {
-  static defaultProps = {
-    isSelected: false,
-    nodeSize: 154,
-    maxTitleChars: 12,
-    onNodeMouseEnter: () => {
-      return;
-    },
-    onNodeMouseLeave: () => {
-      return;
-    },
-    onNodeMove: () => {
-      return;
-    },
-    onNodeSelected: () => {
-      return;
-    },
-    onNodeUpdate: () => {
-      return;
-    },
-    centerNodeOnMove: true,
+    return __assign.apply(this, arguments);
   };
 
-  static getDerivedStateFromProps(
-    nextProps: INodeProps,
-    prevState: INodeState
-  ) {
-    return {
-      selected: nextProps.isSelected,
-      x: nextProps.data.x,
-      y: nextProps.data.y,
+exports.__esModule = true;
+const d3 = require('d3');
+const React = require('react');
+const edge_1 = require('./edge');
+const graph_util_1 = require('../utilities/graph-util');
+const node_text_1 = require('./node-text');
+const Node = /** @class */ (function(_super) {
+  __extends(Node, _super);
+
+  function Node(props) {
+    const _this = _super.call(this, props) || this;
+
+    _this.handleMouseMove = function() {
+      const mouseButtonDown = d3.event.sourceEvent.buttons === 1;
+      const shiftKey = d3.event.sourceEvent.shiftKey;
+      const _a = _this.props,
+        nodeSize = _a.nodeSize,
+        layoutEngine = _a.layoutEngine,
+        nodeKey = _a.nodeKey,
+        viewWrapperElem = _a.viewWrapperElem;
+
+      if (!mouseButtonDown) {
+        return;
+      }
+
+      // While the mouse is down, this function handles all mouse movement
+      const newState = {
+        x: d3.event.x,
+        y: d3.event.y,
+        pointerOffset: undefined,
+      };
+
+      if (!_this.props.centerNodeOnMove) {
+        newState.pointerOffset = _this.state.pointerOffset || {
+          x: d3.event.x - _this.props.data.x,
+          y: d3.event.y - _this.props.data.y,
+        };
+        newState.x -= newState.pointerOffset.x;
+        newState.y -= newState.pointerOffset.y;
+      }
+
+      if (shiftKey) {
+        _this.setState({ drawingEdge: true });
+        // draw edge
+        // undo the target offset subtraction done by Edge
+        const off = edge_1['default'].calculateOffset(
+          nodeSize,
+          _this.props.data,
+          newState,
+          nodeKey,
+          true,
+          viewWrapperElem
+        );
+
+        newState.x += off.xOff;
+        newState.y += off.yOff;
+        // now tell the graph that we're actually drawing an edge
+      } else if (!_this.state.drawingEdge && layoutEngine) {
+        // move node using the layout engine
+        Object.assign(newState, layoutEngine.getPositionForNode(newState));
+      }
+
+      _this.setState(newState);
+      // Never use this.props.index because if the nodes array changes order
+      // then this function could move the wrong node.
+      _this.props.onNodeMove(newState, _this.props.data[nodeKey], shiftKey);
     };
-  }
+    _this.handleDragStart = function() {
+      if (!_this.nodeRef.current) {
+        return;
+      }
 
-  nodeRef: any;
-  oldSibling: any;
+      if (!_this.oldSibling) {
+        _this.oldSibling = _this.nodeRef.current.parentElement.nextSibling;
+      }
 
-  constructor(props: INodeProps) {
-    super(props);
+      // Moves child to the end of the element stack to re-arrange the z-index
+      _this.nodeRef.current.parentElement.parentElement.appendChild(
+        _this.nodeRef.current.parentElement
+      );
+    };
+    _this.handleDragEnd = function() {
+      if (!_this.nodeRef.current) {
+        return;
+      }
 
-    this.state = {
+      const _a = _this.state,
+        x = _a.x,
+        y = _a.y,
+        drawingEdge = _a.drawingEdge;
+      const _b = _this.props,
+        data = _b.data,
+        nodeKey = _b.nodeKey,
+        onNodeSelected = _b.onNodeSelected,
+        onNodeUpdate = _b.onNodeUpdate;
+      const sourceEvent = d3.event.sourceEvent;
+
+      _this.setState({
+        mouseDown: false,
+        drawingEdge: false,
+        pointerOffset: null,
+      });
+
+      if (_this.oldSibling && _this.oldSibling.parentElement) {
+        _this.oldSibling.parentElement.insertBefore(
+          _this.nodeRef.current.parentElement,
+          _this.oldSibling
+        );
+      }
+
+      const shiftKey = sourceEvent.shiftKey;
+
+      onNodeUpdate({ x: x, y: y }, data[nodeKey], shiftKey || drawingEdge);
+      onNodeSelected(data, data[nodeKey], shiftKey || drawingEdge, sourceEvent);
+    };
+    _this.handleMouseOver = function(event) {
+      // Detect if mouse is already down and do nothing.
+      let hovered = false;
+
+      if (
+        (d3.event && d3.event.buttons !== 1) ||
+        (event && event.buttons !== 1)
+      ) {
+        hovered = true;
+        _this.setState({ hovered: hovered });
+      }
+
+      _this.props.onNodeMouseEnter(event, _this.props.data, hovered);
+    };
+    _this.handleMouseOut = function(event) {
+      // Detect if mouse is already down and do nothing. Sometimes the system lags on
+      // drag and we don't want the mouseOut to fire while the user is moving the
+      // node around
+      _this.setState({ hovered: false });
+      _this.props.onNodeMouseLeave(event, _this.props.data);
+    };
+    _this.state = {
       drawingEdge: false,
       hovered: false,
       mouseDown: false,
@@ -129,11 +214,18 @@ class Node extends React.Component<INodeProps, INodeState> {
       y: props.data.y || 0,
       pointerOffset: null,
     };
+    _this.nodeRef = React.createRef();
 
-    this.nodeRef = React.createRef();
+    return _this;
   }
-
-  componentDidMount() {
+  Node.getDerivedStateFromProps = function(nextProps, prevState) {
+    return {
+      selected: nextProps.isSelected,
+      x: nextProps.data.x,
+      y: nextProps.data.y,
+    };
+  };
+  Node.prototype.componentDidMount = function() {
     const dragFunction = d3
       .drag()
       .on('drag', this.handleMouseMove)
@@ -143,128 +235,8 @@ class Node extends React.Component<INodeProps, INodeState> {
     d3.select(this.nodeRef.current)
       .on('mouseout', this.handleMouseOut)
       .call(dragFunction);
-  }
-
-  handleMouseMove = () => {
-    const mouseButtonDown = d3.event.sourceEvent.buttons === 1;
-    const shiftKey = d3.event.sourceEvent.shiftKey;
-    const { nodeSize, layoutEngine, nodeKey, viewWrapperElem } = this.props;
-
-    if (!mouseButtonDown) {
-      return;
-    }
-
-    // While the mouse is down, this function handles all mouse movement
-    const newState = {
-      x: d3.event.x,
-      y: d3.event.y,
-    };
-
-    if (!this.props.centerNodeOnMove) {
-      newState.pointerOffset = this.state.pointerOffset || {
-        x: d3.event.x - this.props.data.x,
-        y: d3.event.y - this.props.data.y,
-      };
-      newState.x -= newState.pointerOffset.x;
-      newState.y -= newState.pointerOffset.y;
-    }
-
-    if (shiftKey) {
-      this.setState({ drawingEdge: true });
-      // draw edge
-      // undo the target offset subtraction done by Edge
-      const off = Edge.calculateOffset(
-        nodeSize,
-        this.props.data,
-        newState,
-        nodeKey,
-        true,
-        viewWrapperElem
-      );
-
-      newState.x += off.xOff;
-      newState.y += off.yOff;
-      // now tell the graph that we're actually drawing an edge
-    } else if (!this.state.drawingEdge && layoutEngine) {
-      // move node using the layout engine
-      Object.assign(newState, layoutEngine.getPositionForNode(newState));
-    }
-
-    this.setState(newState);
-    // Never use this.props.index because if the nodes array changes order
-    // then this function could move the wrong node.
-    this.props.onNodeMove(newState, this.props.data[nodeKey], shiftKey);
   };
-
-  handleDragStart = () => {
-    if (!this.nodeRef.current) {
-      return;
-    }
-
-    if (!this.oldSibling) {
-      this.oldSibling = this.nodeRef.current.parentElement.nextSibling;
-    }
-
-    // Moves child to the end of the element stack to re-arrange the z-index
-    this.nodeRef.current.parentElement.parentElement.appendChild(
-      this.nodeRef.current.parentElement
-    );
-  };
-
-  handleDragEnd = () => {
-    if (!this.nodeRef.current) {
-      return;
-    }
-
-    const { x, y, drawingEdge } = this.state;
-    const { data, nodeKey, onNodeSelected, onNodeUpdate } = this.props;
-    const { sourceEvent } = d3.event;
-
-    this.setState({
-      mouseDown: false,
-      drawingEdge: false,
-      pointerOffset: null,
-    });
-
-    if (this.oldSibling && this.oldSibling.parentElement) {
-      this.oldSibling.parentElement.insertBefore(
-        this.nodeRef.current.parentElement,
-        this.oldSibling
-      );
-    }
-
-    const shiftKey = sourceEvent.shiftKey;
-
-    onNodeUpdate({ x, y }, data[nodeKey], shiftKey || drawingEdge);
-
-    onNodeSelected(data, data[nodeKey], shiftKey || drawingEdge, sourceEvent);
-  };
-
-  handleMouseOver = (event: any) => {
-    // Detect if mouse is already down and do nothing.
-    let hovered = false;
-
-    if (
-      (d3.event && d3.event.buttons !== 1) ||
-      (event && event.buttons !== 1)
-    ) {
-      hovered = true;
-      this.setState({ hovered });
-    }
-
-    this.props.onNodeMouseEnter(event, this.props.data, hovered);
-  };
-
-  handleMouseOut = (event: any) => {
-    // Detect if mouse is already down and do nothing. Sometimes the system lags on
-    // drag and we don't want the mouseOut to fire while the user is moving the
-    // node around
-
-    this.setState({ hovered: false });
-    this.props.onNodeMouseLeave(event, this.props.data);
-  };
-
-  static getNodeTypeXlinkHref(data: INode, nodeTypes: any) {
+  Node.getNodeTypeXlinkHref = function(data, nodeTypes) {
     if (data.type && nodeTypes[data.type]) {
       return nodeTypes[data.type].shapeId;
     } else if (nodeTypes.emptyNode) {
@@ -272,9 +244,8 @@ class Node extends React.Component<INodeProps, INodeState> {
     }
 
     return null;
-  }
-
-  static getNodeSubtypeXlinkHref(data: INode, nodeSubtypes?: any) {
+  };
+  Node.getNodeSubtypeXlinkHref = function(data, nodeSubtypes) {
     if (data.subtype && nodeSubtypes && nodeSubtypes[data.subtype]) {
       return nodeSubtypes[data.subtype].shapeId;
     } else if (nodeSubtypes && nodeSubtypes.emptyNode) {
@@ -282,34 +253,41 @@ class Node extends React.Component<INodeProps, INodeState> {
     }
 
     return null;
-  }
-
-  renderShape() {
-    const {
-      renderNode,
-      data,
-      index,
-      nodeTypes,
-      nodeSubtypes,
-      nodeKey,
-    } = this.props;
-    const { hovered, selected } = this.state;
+  };
+  Node.prototype.renderShape = function() {
+    const _a = this.props,
+      renderNode = _a.renderNode,
+      data = _a.data,
+      index = _a.index,
+      nodeTypes = _a.nodeTypes,
+      nodeSubtypes = _a.nodeSubtypes,
+      nodeKey = _a.nodeKey;
+    const _b = this.state,
+      hovered = _b.hovered,
+      selected = _b.selected;
     const props = {
       height: this.props.nodeSize || 0,
       width: this.props.nodeSize || 0,
     };
-    const nodeShapeContainerClassName = GraphUtils.classNames('shape');
-    const nodeClassName = GraphUtils.classNames('node', { selected, hovered });
-    const nodeSubtypeClassName = GraphUtils.classNames('subtype-shape', {
-      selected: this.state.selected,
+    const nodeShapeContainerClassName = graph_util_1['default'].classNames(
+      'shape'
+    );
+    const nodeClassName = graph_util_1['default'].classNames('node', {
+      selected: selected,
+      hovered: hovered,
     });
+    const nodeSubtypeClassName = graph_util_1['default'].classNames(
+      'subtype-shape',
+      {
+        selected: this.state.selected,
+      }
+    );
     const nodeTypeXlinkHref = Node.getNodeTypeXlinkHref(data, nodeTypes) || '';
     const nodeSubtypeXlinkHref =
       Node.getNodeSubtypeXlinkHref(data, nodeSubtypes) || '';
-
     // get width and height defined on def element
-    const defSvgNodeElement: any = nodeTypeXlinkHref
-      ? document.querySelector(`defs>${nodeTypeXlinkHref}`)
+    const defSvgNodeElement = nodeTypeXlinkHref
+      ? document.querySelector('defs>' + nodeTypeXlinkHref)
       : null;
     const nodeWidthAttr = defSvgNodeElement
       ? defSvgNodeElement.getAttribute('width')
@@ -325,81 +303,105 @@ class Node extends React.Component<INodeProps, INodeState> {
       // Originally: graphView, domNode, datum, index, elements.
       return renderNode(this.nodeRef, data, data[nodeKey], selected, hovered);
     } else {
-      return (
-        <g className={nodeShapeContainerClassName} {...props}>
-          {!!data.subtype && (
-            <use
-              data-index={index}
-              className={nodeSubtypeClassName}
-              x={-props.width / 2}
-              y={-props.height / 2}
-              width={props.width}
-              height={props.height}
-              xlinkHref={nodeSubtypeXlinkHref}
-            />
-          )}
-          <use
-            data-index={index}
-            className={nodeClassName}
-            x={-props.width / 2}
-            y={-props.height / 2}
-            width={props.width}
-            height={props.height}
-            xlinkHref={nodeTypeXlinkHref}
-          />
-        </g>
+      return React.createElement(
+        'g',
+        __assign({ className: nodeShapeContainerClassName }, props),
+        !!data.subtype &&
+          React.createElement('use', {
+            'data-index': index,
+            className: nodeSubtypeClassName,
+            x: -props.width / 2,
+            y: -props.height / 2,
+            width: props.width,
+            height: props.height,
+            xlinkHref: nodeSubtypeXlinkHref,
+          }),
+        React.createElement('use', {
+          'data-index': index,
+          className: nodeClassName,
+          x: -props.width / 2,
+          y: -props.height / 2,
+          width: props.width,
+          height: props.height,
+          xlinkHref: nodeTypeXlinkHref,
+        })
       );
     }
-  }
-
-  renderText() {
-    const {
-      data,
-      id,
-      nodeTypes,
-      renderNodeText,
-      isSelected,
-      maxTitleChars,
-    } = this.props;
+  };
+  Node.prototype.renderText = function() {
+    const _a = this.props,
+      data = _a.data,
+      id = _a.id,
+      nodeTypes = _a.nodeTypes,
+      renderNodeText = _a.renderNodeText,
+      isSelected = _a.isSelected,
+      maxTitleChars = _a.maxTitleChars;
 
     if (renderNodeText) {
       return renderNodeText(data, id, isSelected);
     }
 
-    return (
-      <NodeText
-        data={data}
-        nodeTypes={nodeTypes}
-        isSelected={this.state.selected}
-        maxTitleChars={maxTitleChars}
-      />
-    );
-  }
-
-  render() {
-    const { x, y, hovered, selected } = this.state;
-    const { opacity, id, data } = this.props;
-    const className = GraphUtils.classNames('node', data.type, {
-      hovered,
-      selected,
+    return React.createElement(node_text_1['default'], {
+      data: data,
+      nodeTypes: nodeTypes,
+      isSelected: this.state.selected,
+      maxTitleChars: maxTitleChars,
+    });
+  };
+  Node.prototype.render = function() {
+    const _a = this.state,
+      x = _a.x,
+      y = _a.y,
+      hovered = _a.hovered,
+      selected = _a.selected;
+    const _b = this.props,
+      opacity = _b.opacity,
+      id = _b.id,
+      data = _b.data;
+    const className = graph_util_1['default'].classNames('node', data.type, {
+      hovered: hovered,
+      selected: selected,
     });
 
-    return (
-      <g
-        className={className}
-        onMouseOver={this.handleMouseOver}
-        onMouseOut={this.handleMouseOut}
-        id={id}
-        ref={this.nodeRef}
-        opacity={opacity}
-        transform={`translate(${x}, ${y})`}
-        style={{ transform: `matrix(1, 0, 0, 1, ${x}, ${y})` }}
-      >
-        {this.renderShape()}
-        {this.renderText()}
-      </g>
+    return React.createElement(
+      'g',
+      {
+        className: className,
+        onMouseOver: this.handleMouseOver,
+        onMouseOut: this.handleMouseOut,
+        id: id,
+        ref: this.nodeRef,
+        opacity: opacity,
+        transform: 'translate(' + x + ', ' + y + ')',
+        style: { transform: 'matrix(1, 0, 0, 1, ' + x + ', ' + y + ')' },
+      },
+      this.renderShape(),
+      this.renderText()
     );
-  }
-}
+  };
+  Node.defaultProps = {
+    isSelected: false,
+    nodeSize: 154,
+    maxTitleChars: 12,
+    onNodeMouseEnter: function() {
+      return;
+    },
+    onNodeMouseLeave: function() {
+      return;
+    },
+    onNodeMove: function() {
+      return;
+    },
+    onNodeSelected: function() {
+      return;
+    },
+    onNodeUpdate: function() {
+      return;
+    },
+    centerNodeOnMove: true,
+  };
 
-export default Node;
+  return Node;
+})(React.Component);
+
+exports['default'] = Node;

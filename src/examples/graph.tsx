@@ -38,7 +38,8 @@ import GraphConfig, {
   SPECIAL_EDGE_TYPE,
   SPECIAL_TYPE,
   SKINNY_TYPE
-} from "./graph-config"; // Configures node/edge types
+} from "./graph-config";
+import {LayoutEngineOptions} from "../utilities/layout-engine/layout-engine-types"; // Configures node/edge types
 
 type IGraph = {
   nodes: INode[];
@@ -222,7 +223,7 @@ type IGraphState = {
   selected: any;
   totalNodes: number;
   copiedNode: any;
-  layoutEngineType?: LayoutEngineType;
+  layoutEngineType?: LayoutEngineOptions;
 };
 
 class Graph extends React.Component<IGraphProps, IGraphState> {
@@ -479,7 +480,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
 
   handleChangeLayoutEngineType = (event: any) => {
     this.setState({
-      layoutEngineType: event.target.value as LayoutEngineType | "None"
+      layoutEngineType: event.target.value as LayoutEngineOptions | "None"
     });
   };
 

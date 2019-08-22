@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,85 +15,124 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
+      return extendStatics(d, b);
+    };
+
+    return function(d, b) {
+      extendStatics(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
+
+exports.__esModule = true;
 /*
   Zoom slider and zoom to fit controls for GraphView
 */
-
-import React from 'react';
-import Parse from 'html-react-parser';
-import faExpand from '@fortawesome/fontawesome-free/svgs/solid/expand.svg';
-
+const React = require('react');
+const html_react_parser_1 = require('html-react-parser');
+// @ts-ignore - Cannot get definitions for specific SVGs.
+const expand_svg_1 = require('@fortawesome/fontawesome-free/svgs/solid/expand.svg');
 const steps = 100; // Slider steps
-const parsedIcon = Parse(faExpand); //  parse SVG once
-const ExpandIcon = () => parsedIcon; // convert SVG to react component
+const parsedIcon = html_react_parser_1['default'](expand_svg_1['default']); //  parse SVG once
+const GraphControls = /** @class */ (function(_super) {
+  __extends(GraphControls, _super);
 
-type IGraphControlProps = {
-  maxZoom?: number,
-  minZoom?: number,
-  zoomLevel: number,
-  zoomToFit: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
-  modifyZoom: (delta: number) => boolean,
-};
+  function GraphControls() {
+    const _this = (_super !== null && _super.apply(this, arguments)) || this;
 
-class GraphControls extends React.Component<IGraphControlProps> {
-  static defaultProps = {
+    // Modify current zoom of graph-view
+    _this.zoom = function(e) {
+      const _a = _this.props,
+        minZoom = _a.minZoom,
+        maxZoom = _a.maxZoom;
+      const sliderVal = e.target.value;
+      const zoomLevelNext = _this.sliderToZoom(sliderVal);
+      const delta = zoomLevelNext - _this.props.zoomLevel;
+
+      if (zoomLevelNext <= (maxZoom || 0) && zoomLevelNext >= (minZoom || 0)) {
+        _this.props.modifyZoom(delta);
+      }
+    };
+
+    return _this;
+  }
+  // Convert slider val (0-steps) to original zoom value range
+  GraphControls.prototype.sliderToZoom = function(val) {
+    const _a = this.props,
+      minZoom = _a.minZoom,
+      maxZoom = _a.maxZoom;
+
+    return (val * ((maxZoom || 0) - (minZoom || 0))) / steps + (minZoom || 0);
+  };
+  // Convert zoom val (minZoom-maxZoom) to slider range
+  GraphControls.prototype.zoomToSlider = function(val) {
+    const _a = this.props,
+      minZoom = _a.minZoom,
+      maxZoom = _a.maxZoom;
+
+    return ((val - (minZoom || 0)) * steps) / ((maxZoom || 0) - (minZoom || 0));
+  };
+  GraphControls.prototype.render = function() {
+    return React.createElement(
+      'div',
+      { className: 'graph-controls' },
+      React.createElement(
+        'div',
+        { className: 'slider-wrapper' },
+        React.createElement('span', null, '-'),
+        React.createElement('input', {
+          type: 'range',
+          className: 'slider',
+          min: this.zoomToSlider(this.props.minZoom || 0),
+          max: this.zoomToSlider(this.props.maxZoom || 0),
+          value: this.zoomToSlider(this.props.zoomLevel),
+          onChange: this.zoom,
+          step: '1',
+        }),
+        React.createElement('span', null, '+')
+      ),
+      React.createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'slider-button',
+          onMouseDown: this.props.zoomToFit,
+        },
+        parsedIcon
+      )
+    );
+  };
+  GraphControls.defaultProps = {
     maxZoom: 1.5,
     minZoom: 0.15,
   };
 
-  // Convert slider val (0-steps) to original zoom value range
-  sliderToZoom(val: number) {
-    const { minZoom, maxZoom } = this.props;
+  return GraphControls;
+})(React.Component);
 
-    return (val * ((maxZoom || 0) - (minZoom || 0))) / steps + (minZoom || 0);
-  }
-
-  // Convert zoom val (minZoom-maxZoom) to slider range
-  zoomToSlider(val: number) {
-    const { minZoom, maxZoom } = this.props;
-
-    return ((val - (minZoom || 0)) * steps) / ((maxZoom || 0) - (minZoom || 0));
-  }
-
-  // Modify current zoom of graph-view
-  zoom = (e: any) => {
-    const { minZoom, maxZoom } = this.props;
-    const sliderVal = e.target.value;
-    const zoomLevelNext = this.sliderToZoom(sliderVal);
-    const delta = zoomLevelNext - this.props.zoomLevel;
-
-    if (zoomLevelNext <= (maxZoom || 0) && zoomLevelNext >= (minZoom || 0)) {
-      this.props.modifyZoom(delta);
-    }
-  };
-
-  render() {
-    return (
-      <div className="graph-controls">
-        <div className="slider-wrapper">
-          <span>-</span>
-          <input
-            type="range"
-            className="slider"
-            min={this.zoomToSlider(this.props.minZoom || 0)}
-            max={this.zoomToSlider(this.props.maxZoom || 0)}
-            value={this.zoomToSlider(this.props.zoomLevel)}
-            onChange={this.zoom}
-            step="1"
-          />
-          <span>+</span>
-        </div>
-        <button
-          type="button"
-          className="slider-button"
-          onMouseDown={this.props.zoomToFit}
-        >
-          <ExpandIcon />
-        </button>
-      </div>
-    );
-  }
-}
-
-export default GraphControls;
+exports['default'] = GraphControls;

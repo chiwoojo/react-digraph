@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,39 +15,73 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
+      return extendStatics(d, b);
+    };
 
-type IBackgroundProps = {
-  gridSize?: number,
-  backgroundFillId?: string,
-  renderBackground?: (gridSize?: number) => any,
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-class Background extends React.Component<IBackgroundProps> {
-  static defaultProps = {
-    backgroundFillId: '#grid',
-    gridSize: 40960,
-  };
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 
-  render() {
-    const { gridSize, backgroundFillId, renderBackground } = this.props;
+exports.__esModule = true;
+const React = require('react');
+const Background = /** @class */ (function(_super) {
+  __extends(Background, _super);
+
+  function Background() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
+  }
+  Background.prototype.render = function() {
+    const _a = this.props,
+      gridSize = _a.gridSize,
+      backgroundFillId = _a.backgroundFillId,
+      renderBackground = _a.renderBackground;
 
     if (renderBackground != null) {
       return renderBackground(gridSize);
     }
 
-    return (
-      <rect
-        className="background"
-        x={-(gridSize || 0) / 4}
-        y={-(gridSize || 0) / 4}
-        width={gridSize}
-        height={gridSize}
-        fill={`url(${backgroundFillId || ''})`}
-      />
-    );
-  }
-}
+    return React.createElement('rect', {
+      className: 'background',
+      x: -(gridSize || 0) / 4,
+      y: -(gridSize || 0) / 4,
+      width: gridSize,
+      height: gridSize,
+      fill: 'url(' + (backgroundFillId || '') + ')',
+    });
+  };
+  Background.defaultProps = {
+    backgroundFillId: '#grid',
+    gridSize: 40960,
+  };
 
-export default Background;
+  return Background;
+})(React.Component);
+
+exports['default'] = Background;

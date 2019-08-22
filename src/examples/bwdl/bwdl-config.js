@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,111 +15,118 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-
+exports.__esModule = true;
 /*
   Example config for GraphView component
 */
-import * as React from 'react';
+const React = require('react');
 
-export const NODE_KEY = 'title'; // Key used to identify nodes
-
+exports.NODE_KEY = 'title'; // Key used to identify nodes
 // These keys are arbitrary (but must match the config)
 // However, GraphView renders text differently for empty types
 // so this has to be passed in if that behavior is desired.
-export const EMPTY_TYPE = 'empty'; // Empty node type
-export const CHOICE_TYPE = 'Choice';
-export const TASK_TYPE = 'Task';
-export const PASS_TYPE = 'Pass';
-export const WAIT_TYPE = 'Wait';
-export const TERMINATOR_TYPE = 'Terminator';
-export const SPECIAL_CHILD_SUBTYPE = 'specialChild';
-export const EMPTY_EDGE_TYPE = 'emptyEdge';
-export const SPECIAL_EDGE_TYPE = 'specialEdge';
-
-export const nodeTypes = [
-  EMPTY_TYPE,
-  CHOICE_TYPE,
-  TASK_TYPE,
-  PASS_TYPE,
-  WAIT_TYPE,
-  TERMINATOR_TYPE,
+exports.EMPTY_TYPE = 'empty'; // Empty node type
+exports.CHOICE_TYPE = 'Choice';
+exports.TASK_TYPE = 'Task';
+exports.PASS_TYPE = 'Pass';
+exports.WAIT_TYPE = 'Wait';
+exports.TERMINATOR_TYPE = 'Terminator';
+exports.SPECIAL_CHILD_SUBTYPE = 'specialChild';
+exports.EMPTY_EDGE_TYPE = 'emptyEdge';
+exports.SPECIAL_EDGE_TYPE = 'specialEdge';
+exports.nodeTypes = [
+  exports.EMPTY_TYPE,
+  exports.CHOICE_TYPE,
+  exports.TASK_TYPE,
+  exports.PASS_TYPE,
+  exports.WAIT_TYPE,
+  exports.TERMINATOR_TYPE,
 ];
-export const edgeTypes = [EMPTY_EDGE_TYPE, SPECIAL_EDGE_TYPE];
-
-const EmptyShape = (
-  <symbol viewBox="0 0 100 100" id="empty" width="100" height="100">
-    <circle cx="50" cy="50" r="45" />
-  </symbol>
+exports.edgeTypes = [exports.EMPTY_EDGE_TYPE, exports.SPECIAL_EDGE_TYPE];
+const EmptyShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'empty', width: '100', height: '100' },
+  React.createElement('circle', { cx: '50', cy: '50', r: '45' })
+);
+const ChoiceShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'choice', width: '100', height: '100' },
+  React.createElement('rect', {
+    transform: 'translate(50, 5) rotate(45)',
+    width: '65',
+    height: '65',
+  })
+);
+const TaskShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'task', width: '100', height: '100' },
+  React.createElement('rect', {
+    width: '80',
+    height: '80',
+    rx: '15',
+    ry: '15',
+    transform: 'translate(10, 10)',
+  })
+);
+const PassShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'pass', width: '100', height: '100' },
+  React.createElement('rect', {
+    transform: 'translate(7.5, 10)',
+    width: '85',
+    height: '85',
+  })
+);
+const WaitShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'wait', width: '100', height: '100' },
+  React.createElement('circle', {
+    cx: '50',
+    cy: '50',
+    r: '45',
+    transform: 'translate(0, 2)',
+  })
+);
+const TerminatorShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'terminator', width: '100', height: '100' },
+  React.createElement('rect', {
+    width: '80',
+    height: '80',
+    rx: '15',
+    ry: '15',
+    transform: 'translate(10, 10)',
+  })
+);
+const SpecialChildShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'specialChild', width: '100', height: '100' },
+  React.createElement('rect', { x: '2.5', y: '0', width: '95', height: '97.5' })
+);
+const EmptyEdgeShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 50 50', id: 'emptyEdge' },
+  React.createElement('circle', {
+    cx: '25',
+    cy: '25',
+    r: '8',
+    fill: 'currentColor',
+  })
+);
+const SpecialEdgeShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 50 50', id: 'specialEdge' },
+  React.createElement('rect', {
+    transform: 'rotate(45)',
+    x: '27.5',
+    y: '-7.5',
+    width: '15',
+    height: '15',
+    fill: 'currentColor',
+  })
 );
 
-const ChoiceShape = (
-  <symbol viewBox="0 0 100 100" id="choice" width="100" height="100">
-    <rect transform="translate(50, 5) rotate(45)" width="65" height="65" />
-  </symbol>
-);
-
-const TaskShape = (
-  <symbol viewBox="0 0 100 100" id="task" width="100" height="100">
-    <rect
-      width="80"
-      height="80"
-      rx="15"
-      ry="15"
-      transform="translate(10, 10)"
-    />
-  </symbol>
-);
-
-const PassShape = (
-  <symbol viewBox="0 0 100 100" id="pass" width="100" height="100">
-    <rect transform="translate(7.5, 10)" width="85" height="85" />
-  </symbol>
-);
-
-const WaitShape = (
-  <symbol viewBox="0 0 100 100" id="wait" width="100" height="100">
-    <circle cx="50" cy="50" r="45" transform="translate(0, 2)" />
-  </symbol>
-);
-
-const TerminatorShape = (
-  <symbol viewBox="0 0 100 100" id="terminator" width="100" height="100">
-    <rect
-      width="80"
-      height="80"
-      rx="15"
-      ry="15"
-      transform="translate(10, 10)"
-    />
-  </symbol>
-);
-
-const SpecialChildShape = (
-  <symbol viewBox="0 0 100 100" id="specialChild" width="100" height="100">
-    <rect x="2.5" y="0" width="95" height="97.5" />
-  </symbol>
-);
-
-const EmptyEdgeShape = (
-  <symbol viewBox="0 0 50 50" id="emptyEdge">
-    <circle cx="25" cy="25" r="8" fill="currentColor" />
-  </symbol>
-);
-
-const SpecialEdgeShape = (
-  <symbol viewBox="0 0 50 50" id="specialEdge">
-    <rect
-      transform="rotate(45)"
-      x="27.5"
-      y="-7.5"
-      width="15"
-      height="15"
-      fill="currentColor"
-    />
-  </symbol>
-);
-
-export default {
+exports['default'] = {
   EdgeTypes: {
     emptyEdge: {
       shape: EmptyEdgeShape,

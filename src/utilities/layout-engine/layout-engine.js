@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,28 +15,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-
-// import { type IGraphViewProps } from '../../components/graph-view';
-import { type IGraphViewProps } from '../../components/graph-view-props';
-import { type INode } from '../../components/node';
-
-export type IPosition = {
-  x: number,
-  y: number,
-  [key: string]: any,
-};
-
-export default class LayoutEngine {
-  graphViewProps: IGraphViewProps;
-  constructor(graphViewProps: IGraphViewProps) {
+exports.__esModule = true;
+const LayoutEngine = /** @class */ (function() {
+  function LayoutEngine(graphViewProps) {
     this.graphViewProps = graphViewProps;
   }
-
-  calculatePosition(node: IPosition) {
+  LayoutEngine.prototype.calculatePosition = function(node) {
     return node;
-  }
-
-  adjustNodes(nodes: INode[], nodesMap?: any): INode[] {
+  };
+  LayoutEngine.prototype.adjustNodes = function(nodes, nodesMap) {
     let node = null;
 
     for (let i = 0; i < nodes.length; i++) {
@@ -50,9 +38,12 @@ export default class LayoutEngine {
     }
 
     return nodes;
-  }
-
-  getPositionForNode(node: IPosition): IPosition {
+  };
+  LayoutEngine.prototype.getPositionForNode = function(node) {
     return this.calculatePosition(node);
-  }
-}
+  };
+
+  return LayoutEngine;
+})();
+
+exports['default'] = LayoutEngine;

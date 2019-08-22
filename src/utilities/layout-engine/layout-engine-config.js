@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,17 +15,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+exports.__esModule = true;
+const none_1 = require('./none');
+const snap_to_grid_1 = require('./snap-to-grid');
+const vertical_tree_1 = require('./vertical-tree');
+const horizontal_tree_1 = require('./horizontal-tree');
 
-import None from './none';
-import SnapToGrid from './snap-to-grid';
-import VerticalTree from './vertical-tree';
-import HorizontalTree from './horizontal-tree';
-
-export type LayoutEngine = None | SnapToGrid | VerticalTree | HorizontalTree;
-
-export const LayoutEngines = {
-  None,
-  SnapToGrid,
-  VerticalTree,
-  HorizontalTree,
+exports.LayoutEngines = {
+  None: none_1['default'],
+  SnapToGrid: snap_to_grid_1['default'],
+  VerticalTree: vertical_tree_1['default'],
+  HorizontalTree: horizontal_tree_1['default'],
 };

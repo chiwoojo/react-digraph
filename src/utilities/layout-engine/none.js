@@ -1,4 +1,40 @@
-// @flow
+'use strict';
+
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
+
+      return extendStatics(d, b);
+    };
+
+    return function(d, b) {
+      extendStatics(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
+
+exports.__esModule = true;
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,12 +50,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-import LayoutEngine, { type IPosition } from './layout-engine';
+const layout_engine_1 = require('./layout-engine');
+const None = /** @class */ (function(_super) {
+  __extends(None, _super);
 
-class None extends LayoutEngine {
-  calculatePosition(node: IPosition) {
-    return node;
+  function None() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
   }
-}
+  None.prototype.calculatePosition = function(node) {
+    return node;
+  };
 
-export default None;
+  return None;
+})(layout_engine_1['default']);
+
+exports['default'] = None;

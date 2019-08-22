@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,43 +15,119 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
-import AceEditor from 'react-ace';
-import 'brace/mode/json';
-import 'brace/theme/monokai';
-import { type IEdge } from '../../components/edge';
-import GraphView from '../../components/graph-view';
-import { type INode } from '../../components/node';
-import { type LayoutEngineType } from '../../utilities/layout-engine/layout-engine-types';
-import BwdlTransformer from '../../utilities/transformers/bwdl-transformer';
-import Sidebar from '../sidebar';
-import GraphConfig, { NODE_KEY } from './bwdl-config'; // Configures node/edge types
-import bwdlExample from './bwdl-example-data';
-import BwdlNodeForm from './bwdl-node-form';
+      return extendStatics(d, b);
+    };
 
-type IBwdlState = {
-  nodes: INode[],
-  edges: IEdge[],
-  selected: INode | IEdge | null,
-  layoutEngineType: LayoutEngineType,
-  bwdlText: string,
-  bwdlJson: any,
-  copiedNode: any,
-  selectedBwdlNode: any,
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-class Bwdl extends React.Component<{}, IBwdlState> {
-  GraphView: GraphView | null;
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 
-  constructor(props: any) {
-    super(props);
+exports.__esModule = true;
+const React = require('react');
+const react_ace_1 = require('react-ace');
 
-    const transformed = BwdlTransformer.transform(bwdlExample);
+require('brace/mode/json');
+require('brace/theme/monokai');
+const graph_view_1 = require('../../components/graph-view');
+const bwdl_transformer_1 = require('../../utilities/transformers/bwdl-transformer');
+const sidebar_1 = require('../sidebar');
+const bwdl_config_1 = require('./bwdl-config'); // Configures node/edge types
+const bwdl_example_data_1 = require('./bwdl-example-data');
+const bwdl_node_form_1 = require('./bwdl-node-form');
+const Bwdl = /** @class */ (function(_super) {
+  __extends(Bwdl, _super);
 
-    this.state = {
-      bwdlJson: bwdlExample,
-      bwdlText: JSON.stringify(bwdlExample, null, 2),
+  function Bwdl(props) {
+    const _this = _super.call(this, props) || this;
+
+    _this.updateBwdl = function() {
+      const transformed = bwdl_transformer_1['default'].transform(
+        _this.state.bwdlJson
+      );
+
+      _this.setState({
+        edges: transformed.edges,
+        nodes: transformed.nodes,
+      });
+    };
+    _this.handleTextAreaChange = function(value, event) {
+      let input = null;
+      const bwdlText = value;
+
+      _this.setState({
+        bwdlText: bwdlText,
+      });
+      try {
+        input = JSON.parse(bwdlText);
+      } catch (e) {
+        return;
+      }
+      _this.setState({
+        bwdlJson: input,
+      });
+      _this.updateBwdl();
+    };
+    _this.onSelectNode = function(node) {
+      _this.setState({
+        selected: node,
+        selectedBwdlNode: node ? _this.state.bwdlJson.States[node.title] : null,
+      });
+    };
+    _this.onCreateNode = function() {
+      return;
+    };
+    _this.onUpdateNode = function() {
+      return;
+    };
+    _this.onDeleteNode = function() {
+      return;
+    };
+    _this.onSelectEdge = function() {
+      return;
+    };
+    _this.onCreateEdge = function() {
+      return;
+    };
+    _this.onSwapEdge = function() {
+      return;
+    };
+    _this.onDeleteEdge = function() {
+      return;
+    };
+    const transformed = bwdl_transformer_1['default'].transform(
+      bwdl_example_data_1['default']
+    );
+
+    _this.state = {
+      bwdlJson: bwdl_example_data_1['default'],
+      bwdlText: JSON.stringify(bwdl_example_data_1['default'], null, 2),
       copiedNode: null,
       edges: transformed.edges,
       layoutEngineType: 'VerticalTree',
@@ -58,149 +135,104 @@ class Bwdl extends React.Component<{}, IBwdlState> {
       selected: null,
       selectedBwdlNode: null,
     };
+
+    return _this;
   }
-
-  updateBwdl = () => {
-    const transformed = BwdlTransformer.transform(this.state.bwdlJson);
-
-    this.setState({
-      edges: transformed.edges,
-      nodes: transformed.nodes,
-    });
-  };
-
-  handleTextAreaChange = (value: string, event: any) => {
-    let input = null;
-    const bwdlText = value;
-
-    this.setState({
-      bwdlText,
-    });
-
-    try {
-      input = JSON.parse(bwdlText);
-    } catch (e) {
-      return;
-    }
-
-    this.setState({
-      bwdlJson: input,
-    });
-
-    this.updateBwdl();
-  };
-
-  onSelectNode = (node: INode | null) => {
-    this.setState({
-      selected: node,
-      selectedBwdlNode: node ? this.state.bwdlJson.States[node.title] : null,
-    });
-  };
-
-  onCreateNode = () => {
-    return;
-  };
-  onUpdateNode = () => {
-    return;
-  };
-  onDeleteNode = () => {
-    return;
-  };
-  onSelectEdge = () => {
-    return;
-  };
-  onCreateEdge = () => {
-    return;
-  };
-  onSwapEdge = () => {
-    return;
-  };
-  onDeleteEdge = () => {
-    return;
-  };
-
-  renderLeftSidebar() {
-    return (
-      <Sidebar direction="left" size={'100%'}>
-        <div>
-          <AceEditor
-            mode="json"
-            theme="monokai"
-            onChange={this.handleTextAreaChange}
-            name="bwdl-editor"
-            width="100%"
-            height="100%"
-            fontSize={14}
-            editorProps={{ $blockScrolling: true }}
-            highlightActiveLine={true}
-            showPrintMargin={true}
-            showGutter={true}
-            setOptions={{
-              showLineNumbers: true,
-              tabSize: 2,
-            }}
-            value={this.state.bwdlText}
-          />
-        </div>
-      </Sidebar>
+  Bwdl.prototype.renderLeftSidebar = function() {
+    return React.createElement(
+      sidebar_1['default'],
+      { direction: 'left', size: '100%' },
+      React.createElement(
+        'div',
+        null,
+        React.createElement(react_ace_1['default'], {
+          mode: 'json',
+          theme: 'monokai',
+          onChange: this.handleTextAreaChange,
+          name: 'bwdl-editor',
+          width: '100%',
+          height: '100%',
+          fontSize: 14,
+          editorProps: { $blockScrolling: true },
+          highlightActiveLine: true,
+          showPrintMargin: true,
+          showGutter: true,
+          setOptions: {
+            showLineNumbers: true,
+            tabSize: 2,
+          },
+          value: this.state.bwdlText,
+        })
+      )
     );
-  }
-
-  renderRightSidebar() {
+  };
+  Bwdl.prototype.renderRightSidebar = function() {
     if (!this.state.selected) {
       return null;
     }
 
-    return (
-      <Sidebar direction="right" size="100%">
-        <div className="selected-node-container">
-          <BwdlNodeForm
-            bwdlNode={this.state.selectedBwdlNode}
-            bwdlNodeKey={this.state.selected.title}
-            nextChoices={Object.keys(this.state.bwdlJson.States)}
-          />
-        </div>
-      </Sidebar>
+    return React.createElement(
+      sidebar_1['default'],
+      { direction: 'right', size: '100%' },
+      React.createElement(
+        'div',
+        { className: 'selected-node-container' },
+        React.createElement(bwdl_node_form_1['default'], {
+          bwdlNode: this.state.selectedBwdlNode,
+          bwdlNodeKey: this.state.selected.title,
+          nextChoices: Object.keys(this.state.bwdlJson.States),
+        })
+      )
     );
-  }
+  };
+  Bwdl.prototype.renderGraph = function() {
+    const _this = this;
+    const _a = this.state,
+      nodes = _a.nodes,
+      edges = _a.edges,
+      selected = _a.selected;
+    const NodeTypes = bwdl_config_1['default'].NodeTypes,
+      NodeSubtypes = bwdl_config_1['default'].NodeSubtypes,
+      EdgeTypes = bwdl_config_1['default'].EdgeTypes;
 
-  renderGraph() {
-    const { nodes, edges, selected } = this.state;
-    const { NodeTypes, NodeSubtypes, EdgeTypes } = GraphConfig;
-
-    return (
-      <GraphView
-        ref={el => (this.GraphView = el)}
-        nodeKey={NODE_KEY}
-        readOnly={true}
-        nodes={nodes}
-        edges={edges}
-        selected={selected}
-        nodeTypes={NodeTypes}
-        nodeSubtypes={NodeSubtypes}
-        edgeTypes={EdgeTypes}
-        onSelectNode={this.onSelectNode}
-        onCreateNode={this.onCreateNode}
-        onUpdateNode={this.onUpdateNode}
-        onDeleteNode={this.onDeleteNode}
-        onSelectEdge={this.onSelectEdge}
-        onCreateEdge={this.onCreateEdge}
-        onSwapEdge={this.onSwapEdge}
-        onDeleteEdge={this.onDeleteEdge}
-        layoutEngineType={this.state.layoutEngineType}
-      />
+    return React.createElement(graph_view_1['default'], {
+      ref: function(el) {
+        return (_this.GraphView = el);
+      },
+      nodeKey: bwdl_config_1.NODE_KEY,
+      readOnly: true,
+      nodes: nodes,
+      edges: edges,
+      selected: selected,
+      nodeTypes: NodeTypes,
+      nodeSubtypes: NodeSubtypes,
+      edgeTypes: EdgeTypes,
+      onSelectNode: this.onSelectNode,
+      onCreateNode: this.onCreateNode,
+      onUpdateNode: this.onUpdateNode,
+      onDeleteNode: this.onDeleteNode,
+      onSelectEdge: this.onSelectEdge,
+      onCreateEdge: this.onCreateEdge,
+      onSwapEdge: this.onSwapEdge,
+      onDeleteEdge: this.onDeleteEdge,
+      layoutEngineType: this.state.layoutEngineType,
+    });
+  };
+  Bwdl.prototype.render = function() {
+    return React.createElement(
+      'div',
+      { id: 'bwdl-graph' },
+      this.renderLeftSidebar(),
+      React.createElement(
+        'div',
+        { className: 'graph-container' },
+        this.renderGraph()
+      ),
+      this.state.selected && this.renderRightSidebar()
     );
-  }
+  };
 
-  render() {
-    return (
-      <div id="bwdl-graph">
-        {this.renderLeftSidebar()}
-        <div className="graph-container">{this.renderGraph()}</div>
-        {this.state.selected && this.renderRightSidebar()}
-      </div>
-    );
-  }
-}
+  return Bwdl;
+})(React.Component);
 
-export default Bwdl;
+exports['default'] = Bwdl;

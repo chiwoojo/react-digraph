@@ -1,4 +1,4 @@
-export type LayoutEngineType =
+export type LayoutEngineOptions =
   | 'None'
   | 'SnapToGrid'
   | 'VerticalTree'

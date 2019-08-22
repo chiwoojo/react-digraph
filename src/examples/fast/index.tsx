@@ -21,7 +21,7 @@
 import * as React from 'react';
 import { MouseEvent, SyntheticEvent } from 'react';
 import { GraphViewFast, IEdgeType as IEdge, INodeType as INode } from '../../';
-import { LayoutEngineType } from '../../utilities/layout-engine/layout-engine-types';
+import { LayoutEngineOptions } from '../../utilities/layout-engine/layout-engine-types';
 import GraphConfig, {
   edgeTypes,
   EMPTY_EDGE_TYPE,
@@ -209,7 +209,7 @@ interface IGraphState {
   selected: any;
   totalNodes: number;
   copiedNode: any;
-  layoutEngineType?: LayoutEngineType;
+  layoutEngineType?: LayoutEngineOptions;
 }
 
 class Graph extends React.Component<IGraphProps, IGraphState> {
@@ -466,7 +466,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
 
   handleChangeLayoutEngineType = (event: SyntheticEvent<HTMLSelectElement>) => {
     const layout = (event.target as HTMLSelectElement)
-      .value as LayoutEngineType;
+      .value as LayoutEngineOptions;
 
     this.setState({
       layoutEngineType: layout,

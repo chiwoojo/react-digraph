@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,86 +15,126 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
+      return extendStatics(d, b);
+    };
 
-type IBwdlNodeFormProps = {
-  bwdlNode: any,
-  bwdlNodeKey: string,
-  nextChoices: string[],
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-class BwdlNodeForm extends React.Component<IBwdlNodeFormProps> {
-  renderNextOptions(value: any) {
-    const { nextChoices } = this.props;
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 
+exports.__esModule = true;
+const React = require('react');
+const BwdlNodeForm = /** @class */ (function(_super) {
+  __extends(BwdlNodeForm, _super);
+
+  function BwdlNodeForm() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
+  }
+  BwdlNodeForm.prototype.renderNextOptions = function(value) {
+    const nextChoices = this.props.nextChoices;
     // This function is defined and used locally to avoid tslint's jsx-no-lambda error.
     // It requires the local value variable, so it cannot be defined in the class.
-    const handleChange = (event: any) => {
+    const handleChange = function(event) {
       event.target.value = value;
     };
 
-    return (
-      <select defaultValue={value} onChange={handleChange}>
-        {nextChoices.map(choice => {
-          return <option key={choice}>{choice}</option>;
-        })}
-      </select>
+    return React.createElement(
+      'select',
+      { defaultValue: value, onChange: handleChange },
+      nextChoices.map(function(choice) {
+        return React.createElement('option', { key: choice }, choice);
+      })
     );
-  }
+  };
+  BwdlNodeForm.prototype.renderAndObjectArray = function(andObjectArray) {
+    const _this = this;
 
-  renderAndObjectArray(andObjectArray: any[]) {
-    return andObjectArray.map((andObject, index) => {
-      return (
-        <div className="and-object" key={index}>
-          {Object.keys(andObject).map(key => {
-            return (
-              <div className="and-object-value" key={key}>
-                <label>{key}:</label> {this.renderKey(key, andObject[key])}
-              </div>
-            );
-          })}
-        </div>
+    return andObjectArray.map(function(andObject, index) {
+      return React.createElement(
+        'div',
+        { className: 'and-object', key: index },
+        Object.keys(andObject).map(function(key) {
+          return React.createElement(
+            'div',
+            { className: 'and-object-value', key: key },
+            React.createElement('label', null, key, ':'),
+            ' ',
+            _this.renderKey(key, andObject[key])
+          );
+        })
       );
     });
-  }
+  };
+  BwdlNodeForm.prototype.renderChoicesOptions = function(value) {
+    const _this = this;
 
-  renderChoicesOptions(value: any) {
-    return value.map((choice, index) => {
-      return (
-        <div key={index} className="choices">
-          {Object.keys(choice).map(choiceOption => {
-            if (choiceOption === 'Next') {
-              // "Next" option
-              return (
-                <div key={choiceOption}>
-                  <label>Next:</label>{' '}
-                  {this.renderNextOptions(choice[choiceOption])}
-                </div>
-              );
-            } else if (Array.isArray(choice[choiceOption])) {
-              // "And" array
-              return (
-                <div key={choiceOption}>
-                  <label>{choiceOption}:</label>{' '}
-                  {this.renderAndObjectArray(choice[choiceOption])}
-                </div>
-              );
-            }
-
-            // text option
-            return (
-              <div key={choiceOption}>
-                <label>{choiceOption}:</label> {choice[choiceOption]}
-              </div>
+    return value.map(function(choice, index) {
+      return React.createElement(
+        'div',
+        { key: index, className: 'choices' },
+        Object.keys(choice).map(function(choiceOption) {
+          if (choiceOption === 'Next') {
+            // "Next" option
+            return React.createElement(
+              'div',
+              { key: choiceOption },
+              React.createElement('label', null, 'Next:'),
+              ' ',
+              _this.renderNextOptions(choice[choiceOption])
             );
-          })}
-        </div>
+          } else if (Array.isArray(choice[choiceOption])) {
+            // "And" array
+            return React.createElement(
+              'div',
+              { key: choiceOption },
+              React.createElement('label', null, choiceOption, ':'),
+              ' ',
+              _this.renderAndObjectArray(choice[choiceOption])
+            );
+          }
+
+          // text option
+          return React.createElement(
+            'div',
+            { key: choiceOption },
+            React.createElement('label', null, choiceOption, ':'),
+            ' ',
+            choice[choiceOption]
+          );
+        })
       );
     });
-  }
+  };
+  BwdlNodeForm.prototype.renderKey = function(key, value) {
+    const _this = this;
 
-  renderKey(key: string, value: any) {
     if (key === 'Next') {
       return this.renderNextOptions(value);
     } else if (key === 'Choices') {
@@ -105,35 +146,42 @@ class BwdlNodeForm extends React.Component<IBwdlNodeFormProps> {
     ) {
       return value;
     } else if (typeof value === 'object' && !Array.isArray(value)) {
-      return Object.keys(value).map(valueKey => {
-        return (
-          <div key={valueKey} className="node-property node-sub-property">
-            <label>{valueKey}:</label>{' '}
-            {this.renderKey(valueKey, value[valueKey])}
-          </div>
+      return Object.keys(value).map(function(valueKey) {
+        return React.createElement(
+          'div',
+          { key: valueKey, className: 'node-property node-sub-property' },
+          React.createElement('label', null, valueKey, ':'),
+          ' ',
+          _this.renderKey(valueKey, value[valueKey])
         );
       });
     }
 
-    return <pre>{JSON.stringify(value, null, 2)}</pre>;
-  }
+    return React.createElement('pre', null, JSON.stringify(value, null, 2));
+  };
+  BwdlNodeForm.prototype.render = function() {
+    const _this = this;
+    const _a = this.props,
+      bwdlNode = _a.bwdlNode,
+      bwdlNodeKey = _a.bwdlNodeKey;
 
-  render() {
-    const { bwdlNode, bwdlNodeKey } = this.props;
-
-    return (
-      <div>
-        <h2>{bwdlNodeKey}</h2>
-        {Object.keys(bwdlNode).map(key => {
-          return (
-            <div key={key} className="node-property">
-              <label>{key}:</label> {this.renderKey(key, bwdlNode[key])}
-            </div>
-          );
-        })}
-      </div>
+    return React.createElement(
+      'div',
+      null,
+      React.createElement('h2', null, bwdlNodeKey),
+      Object.keys(bwdlNode).map(function(key) {
+        return React.createElement(
+          'div',
+          { key: key, className: 'node-property' },
+          React.createElement('label', null, key, ':'),
+          ' ',
+          _this.renderKey(key, bwdlNode[key])
+        );
+      })
     );
-  }
-}
+  };
 
-export default BwdlNodeForm;
+  return BwdlNodeForm;
+})(React.Component);
+
+exports['default'] = BwdlNodeForm;

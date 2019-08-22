@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,8 +15,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-
-export default {
+exports.__esModule = true;
+exports['default'] = {
   ExampleSource:
     'https://code.uberinternal.com/file/data/aioyv5yrrs3dadbmxlap/PHID-FILE-v36jeiyn4y3gphtdwjsm/1.json',
   Name: 'Colombo_Intercity_Driver_dispatch',

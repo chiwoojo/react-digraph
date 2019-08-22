@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,24 +15,62 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import LayoutEngine, { type IPosition } from './layout-engine';
+      return extendStatics(d, b);
+    };
 
-class SnapToGrid extends LayoutEngine {
-  calculatePosition(node: IPosition) {
-    const { x, y } = node;
-    let { gridSpacing } = this.graphViewProps;
+    return function(d, b) {
+      extendStatics(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
+
+exports.__esModule = true;
+const layout_engine_1 = require('./layout-engine');
+const SnapToGrid = /** @class */ (function(_super) {
+  __extends(SnapToGrid, _super);
+
+  function SnapToGrid() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
+  }
+  SnapToGrid.prototype.calculatePosition = function(node) {
+    const x = node.x,
+      y = node.y;
+    let gridSpacing = this.graphViewProps.gridSpacing;
 
     gridSpacing = gridSpacing || 10;
     const gridOffset = gridSpacing / 2;
-
     let newX = x || 0;
     let newY = y || 0;
 
     if (x && (x - gridOffset) % gridSpacing !== 0) {
       // Add (gridSpacing / 2) to account for the dot rendering.
       // Now the center of the node is on a dot.
-      let multiplier = 1;
+      var multiplier = 1;
 
       if ((x - gridOffset) % gridSpacing < gridOffset) {
         multiplier = -1;
@@ -44,7 +83,7 @@ class SnapToGrid extends LayoutEngine {
     if (y && (y - gridOffset) % gridSpacing !== 0) {
       // Add (gridSpacing / 2) to account for the dot rendering.
       // Now the center of the node is on a dot.
-      let multiplier = 1;
+      var multiplier = 1;
 
       if ((y - gridOffset) % gridSpacing < gridOffset) {
         multiplier = -1;
@@ -58,7 +97,9 @@ class SnapToGrid extends LayoutEngine {
       x: newX,
       y: newY,
     };
-  }
-}
+  };
 
-export default SnapToGrid;
+  return SnapToGrid;
+})(layout_engine_1['default']);
+
+exports['default'] = SnapToGrid;

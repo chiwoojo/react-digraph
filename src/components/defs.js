@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,33 +15,58 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
-import ArrowheadMarker from './arrowhead-marker';
-import BackgroundPattern from './background-pattern';
-import DropshadowFilter from './dropshadow-filter';
+      return extendStatics(d, b);
+    };
 
-type IDefsProps = {
-  gridSpacing?: number,
-  gridDotSize?: number,
-  edgeArrowSize?: number,
-  nodeTypes: any, // TODO: define nodeTypes, nodeSubtypes, and edgeTypes. Must have shape and shapeId!
-  nodeSubtypes: any,
-  edgeTypes: any,
-  renderDefs?: () => any | null,
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-type IDefsState = {
-  graphConfigDefs: any,
-};
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 
-class Defs extends React.Component<IDefsProps, IDefsState> {
-  static defaultProps = {
-    gridDotSize: 2,
-    renderDefs: () => null,
-  };
+exports.__esModule = true;
+const React = require('react');
+const arrowhead_marker_1 = require('./arrowhead-marker');
+const background_pattern_1 = require('./background-pattern');
+const dropshadow_filter_1 = require('./dropshadow-filter');
+const Defs = /** @class */ (function(_super) {
+  __extends(Defs, _super);
 
-  static getDerivedStateFromProps(nextProps: any, prevState: any) {
+  function Defs(props) {
+    const _this = _super.call(this, props) || this;
+
+    _this.state = {
+      graphConfigDefs: [],
+    };
+
+    return _this;
+  }
+  Defs.getDerivedStateFromProps = function(nextProps, prevState) {
     const graphConfigDefs = [];
 
     Defs.processGraphConfigDefs(nextProps.nodeTypes, graphConfigDefs);
@@ -48,51 +74,51 @@ class Defs extends React.Component<IDefsProps, IDefsState> {
     Defs.processGraphConfigDefs(nextProps.edgeTypes, graphConfigDefs);
 
     return {
-      graphConfigDefs,
+      graphConfigDefs: graphConfigDefs,
     };
-  }
-
-  static processGraphConfigDefs(typesObj: any, graphConfigDefs: any) {
-    Object.keys(typesObj).forEach(type => {
+  };
+  Defs.processGraphConfigDefs = function(typesObj, graphConfigDefs) {
+    Object.keys(typesObj).forEach(function(type) {
       const safeId = typesObj[type].shapeId
         ? typesObj[type].shapeId.replace('#', '')
         : 'graphdef';
 
       graphConfigDefs.push(
         React.cloneElement(typesObj[type].shape, {
-          key: `${safeId}-${graphConfigDefs.length + 1}`,
+          key: safeId + '-' + (graphConfigDefs.length + 1),
         })
       );
     });
-  }
+  };
+  Defs.prototype.render = function() {
+    const _a = this.props,
+      edgeArrowSize = _a.edgeArrowSize,
+      gridSpacing = _a.gridSpacing,
+      gridDotSize = _a.gridDotSize;
 
-  constructor(props: IDefsProps) {
-    super(props);
-    this.state = {
-      graphConfigDefs: [],
-    };
-  }
-
-  render() {
-    const { edgeArrowSize, gridSpacing, gridDotSize } = this.props;
-
-    return (
-      <defs>
-        {this.state.graphConfigDefs}
-
-        <ArrowheadMarker edgeArrowSize={edgeArrowSize} />
-
-        <BackgroundPattern
-          gridSpacing={gridSpacing}
-          gridDotSize={gridDotSize}
-        />
-
-        <DropshadowFilter />
-
-        {this.props.renderDefs && this.props.renderDefs()}
-      </defs>
+    return React.createElement(
+      'defs',
+      null,
+      this.state.graphConfigDefs,
+      React.createElement(arrowhead_marker_1['default'], {
+        edgeArrowSize: edgeArrowSize,
+      }),
+      React.createElement(background_pattern_1['default'], {
+        gridSpacing: gridSpacing,
+        gridDotSize: gridDotSize,
+      }),
+      React.createElement(dropshadow_filter_1['default'], null),
+      this.props.renderDefs && this.props.renderDefs()
     );
-  }
-}
+  };
+  Defs.defaultProps = {
+    gridDotSize: 2,
+    renderDefs: function() {
+      return null;
+    },
+  };
 
-export default Defs;
+  return Defs;
+})(React.Component);
+
+exports['default'] = Defs;

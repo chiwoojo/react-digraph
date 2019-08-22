@@ -15,13 +15,13 @@
 */
 
 import * as React from 'react';
-import * as AceEditor from 'react-ace';
+import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/monokai';
 import { IEdge } from '../../components/edge';
 import GraphView from '../../components/graph-view';
 import { INode } from '../../components/node';
-import { LayoutEngineType } from '../../utilities/layout-engine/layout-engine-types';
+import { LayoutEngineOptions } from '../../utilities/layout-engine/layout-engine-types';
 import BwdlTransformer from '../../utilities/transformers/bwdl-transformer';
 import Sidebar from '../sidebar';
 import GraphConfig, { NODE_KEY } from './bwdl-config'; // Configures node/edge types
@@ -32,7 +32,7 @@ type IBwdlState = {
   nodes: INode[];
   edges: IEdge[];
   selected: INode | IEdge | null;
-  layoutEngineType: LayoutEngineType;
+  layoutEngineType: LayoutEngineOptions;
   bwdlText: string;
   bwdlJson: any;
   copiedNode: any;

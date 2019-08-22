@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,90 +15,101 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-
+exports.__esModule = true;
 /*
   Example config for GraphView component
 */
-import * as React from 'react';
+const React = require('react');
 
-export const NODE_KEY = 'id'; // Key used to identify nodes
-
+exports.NODE_KEY = 'id'; // Key used to identify nodes
 // These keys are arbitrary (but must match the config)
 // However, GraphView renders text differently for empty types
 // so this has to be passed in if that behavior is desired.
-export const EMPTY_TYPE = 'customEmpty'; // Empty node type
-export const POLY_TYPE = 'poly';
-export const SPECIAL_TYPE = 'special';
-export const SKINNY_TYPE = 'skinny';
-export const SPECIAL_CHILD_SUBTYPE = 'specialChild';
-export const EMPTY_EDGE_TYPE = 'emptyEdge';
-export const SPECIAL_EDGE_TYPE = 'specialEdge';
-
-export const nodeTypes = [EMPTY_TYPE, POLY_TYPE, SPECIAL_TYPE, SKINNY_TYPE];
-export const edgeTypes = [EMPTY_EDGE_TYPE, SPECIAL_EDGE_TYPE];
-
-const EmptyNodeShape = (
-  <symbol viewBox="0 0 154 154" width="154" height="154" id="emptyNode">
-    <circle cx="77" cy="77" r="76" />
-  </symbol>
+exports.EMPTY_TYPE = 'customEmpty'; // Empty node type
+exports.POLY_TYPE = 'poly';
+exports.SPECIAL_TYPE = 'special';
+exports.SKINNY_TYPE = 'skinny';
+exports.SPECIAL_CHILD_SUBTYPE = 'specialChild';
+exports.EMPTY_EDGE_TYPE = 'emptyEdge';
+exports.SPECIAL_EDGE_TYPE = 'specialEdge';
+exports.nodeTypes = [
+  exports.EMPTY_TYPE,
+  exports.POLY_TYPE,
+  exports.SPECIAL_TYPE,
+  exports.SKINNY_TYPE,
+];
+exports.edgeTypes = [exports.EMPTY_EDGE_TYPE, exports.SPECIAL_EDGE_TYPE];
+const EmptyNodeShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 154 154', width: '154', height: '154', id: 'emptyNode' },
+  React.createElement('circle', { cx: '77', cy: '77', r: '76' })
+);
+const CustomEmptyShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 100 100', id: 'customEmpty' },
+  React.createElement('circle', { cx: '50', cy: '50', r: '45' })
+);
+const SpecialShape = React.createElement(
+  'symbol',
+  { viewBox: '-27 0 154 154', id: 'special', width: '154', height: '154' },
+  React.createElement('rect', {
+    transform: 'translate(50) rotate(45)',
+    width: '109',
+    height: '109',
+  })
+);
+const PolyShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 88 72', id: 'poly', width: '88', height: '88' },
+  React.createElement('path', { d: 'M 0 36 18 0 70 0 88 36 70 72 18 72Z' })
+);
+const SkinnyShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 154 54', width: '154', height: '54', id: 'skinny' },
+  React.createElement('rect', {
+    x: '0',
+    y: '0',
+    rx: '2',
+    ry: '2',
+    width: '154',
+    height: '54',
+  })
+);
+const SpecialChildShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 154 154', id: 'specialChild' },
+  React.createElement('rect', {
+    x: '2.5',
+    y: '0',
+    width: '154',
+    height: '154',
+    fill: 'rgba(30, 144, 255, 0.12)',
+  })
+);
+const EmptyEdgeShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 50 50', id: 'emptyEdge' },
+  React.createElement('circle', {
+    cx: '25',
+    cy: '25',
+    r: '8',
+    fill: 'currentColor',
+  })
+);
+const SpecialEdgeShape = React.createElement(
+  'symbol',
+  { viewBox: '0 0 50 50', id: 'specialEdge' },
+  React.createElement('rect', {
+    transform: 'rotate(45)',
+    x: '27.5',
+    y: '-7.5',
+    width: '15',
+    height: '15',
+    fill: 'currentColor',
+  })
 );
 
-const CustomEmptyShape = (
-  <symbol viewBox="0 0 100 100" id="customEmpty">
-    <circle cx="50" cy="50" r="45" />
-  </symbol>
-);
-
-const SpecialShape = (
-  <symbol viewBox="-27 0 154 154" id="special" width="154" height="154">
-    <rect transform="translate(50) rotate(45)" width="109" height="109" />
-  </symbol>
-);
-
-const PolyShape = (
-  <symbol viewBox="0 0 88 72" id="poly" width="88" height="88">
-    <path d="M 0 36 18 0 70 0 88 36 70 72 18 72Z" />
-  </symbol>
-);
-
-const SkinnyShape = (
-  <symbol viewBox="0 0 154 54" width="154" height="54" id="skinny">
-    <rect x="0" y="0" rx="2" ry="2" width="154" height="54" />
-  </symbol>
-);
-
-const SpecialChildShape = (
-  <symbol viewBox="0 0 154 154" id="specialChild">
-    <rect
-      x="2.5"
-      y="0"
-      width="154"
-      height="154"
-      fill="rgba(30, 144, 255, 0.12)"
-    />
-  </symbol>
-);
-
-const EmptyEdgeShape = (
-  <symbol viewBox="0 0 50 50" id="emptyEdge">
-    <circle cx="25" cy="25" r="8" fill="currentColor" />
-  </symbol>
-);
-
-const SpecialEdgeShape = (
-  <symbol viewBox="0 0 50 50" id="specialEdge">
-    <rect
-      transform="rotate(45)"
-      x="27.5"
-      y="-7.5"
-      width="15"
-      height="15"
-      fill="currentColor"
-    />
-  </symbol>
-);
-
-export default {
+exports['default'] = {
   EdgeTypes: {
     emptyEdge: {
       shape: EmptyEdgeShape,

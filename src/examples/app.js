@@ -1,3 +1,5 @@
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -13,56 +15,118 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import {
-  BrowserRouter as Router,
-  NavLink,
-  Redirect,
-  Route,
-  Switch,
-} from 'react-router-dom';
+      return extendStatics(d, b);
+    };
 
-import Bwdl from './bwdl';
-import BwdlEditable from './bwdl-editable';
-import Graph from './graph';
-import GraphFast from './fast';
+    return function(d, b) {
+      extendStatics(d, b);
 
-import './app.scss';
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 
-class App extends React.Component {
-  render() {
-    return (
-      <Router>
-        <div>
-          <header className="app-header">
-            <nav>
-              <NavLink to="/" exact={true} activeClassName="active">
-                Home
-              </NavLink>
-              <NavLink to="/bwdl" activeClassName="active">
-                BWDL
-              </NavLink>
-            </nav>
-          </header>
+exports.__esModule = true;
+const React = require('react');
+const ReactDOM = require('react-dom');
+const react_router_dom_1 = require('react-router-dom');
+const bwdl_1 = require('./bwdl');
+const bwdl_editable_1 = require('./bwdl-editable');
+const graph_1 = require('./graph');
+const fast_1 = require('./fast');
 
-          <Route exact={true} path="/" component={Graph} />
-          <Switch>
-            <Route path="/bwdl" component={Bwdl} />
-            {/* The following is for typos */}
-            <Redirect from="/bwld" to="/bwdl" />
-            <Route path="/bwdl-editable" component={BwdlEditable} />
-            <Route path="/fast" component={GraphFast} />
-          </Switch>
-        </div>
-      </Router>
-    );
+require('./app.scss');
+const App = /** @class */ (function(_super) {
+  __extends(App, _super);
+
+  function App() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
   }
-}
+  App.prototype.render = function() {
+    return React.createElement(
+      react_router_dom_1.BrowserRouter,
+      null,
+      React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'header',
+          { className: 'app-header' },
+          React.createElement(
+            'nav',
+            null,
+            React.createElement(
+              react_router_dom_1.NavLink,
+              { to: '/', exact: true, activeClassName: 'active' },
+              'Home'
+            ),
+            React.createElement(
+              react_router_dom_1.NavLink,
+              { to: '/bwdl', activeClassName: 'active' },
+              'BWDL'
+            )
+          )
+        ),
+        React.createElement(react_router_dom_1.Route, {
+          exact: true,
+          path: '/',
+          component: graph_1['default'],
+        }),
+        React.createElement(
+          react_router_dom_1.Switch,
+          null,
+          React.createElement(react_router_dom_1.Route, {
+            path: '/bwdl',
+            component: bwdl_1['default'],
+          }),
+          React.createElement(react_router_dom_1.Redirect, {
+            from: '/bwld',
+            to: '/bwdl',
+          }),
+          React.createElement(react_router_dom_1.Route, {
+            path: '/bwdl-editable',
+            component: bwdl_editable_1['default'],
+          }),
+          React.createElement(react_router_dom_1.Route, {
+            path: '/fast',
+            component: fast_1['default'],
+          })
+        )
+      )
+    );
+  };
+
+  return App;
+})(React.Component);
 
 if (typeof window !== 'undefined') {
-  window.onload = () => {
-    ReactDOM.render(<App />, document.getElementById('content'));
+  window.onload = function() {
+    ReactDOM.render(
+      React.createElement(App, null),
+      document.getElementById('content')
+    );
   };
 }

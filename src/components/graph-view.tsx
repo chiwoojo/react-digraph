@@ -705,6 +705,7 @@ class GraphView extends React.Component<IGraphViewProps, IGraphViewState> {
       this.renderConnectedEdgesFromNode(nodeMapNode, true);
       this.asyncRenderNode(node);
     } else if (
+      // @ts-ignore - please review history of why we are allowing nodeId instead of INode interface.
       (canCreateEdge && canCreateEdge(nodeId)) ||
       this.state.draggingEdge
     ) {

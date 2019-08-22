@@ -1,4 +1,5 @@
-// @flow
+'use strict';
+
 /*
   Copyright(c) 2018 Uber Technologies, Inc.
 
@@ -14,32 +15,66 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+const __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (const p in b) {
+            if (b.hasOwnProperty(p)) {
+              d[p] = b[p];
+            }
+          }
+        };
 
-import * as React from 'react';
+      return extendStatics(d, b);
+    };
 
-type ICircleProps = {
-  gridSpacing?: number,
-  gridDotSize?: number,
-};
+    return function(d, b) {
+      extendStatics(d, b);
 
-class Circle extends React.Component<ICircleProps> {
-  static defaultProps = {
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
+
+exports.__esModule = true;
+const React = require('react');
+const Circle = /** @class */ (function(_super) {
+  __extends(Circle, _super);
+
+  function Circle() {
+    return (_super !== null && _super.apply(this, arguments)) || this;
+  }
+  Circle.prototype.render = function() {
+    const _a = this.props,
+      gridSpacing = _a.gridSpacing,
+      gridDotSize = _a.gridDotSize;
+
+    return React.createElement('circle', {
+      className: 'circle',
+      cx: (gridSpacing || 0) / 2,
+      cy: (gridSpacing || 0) / 2,
+      r: gridDotSize,
+    });
+  };
+  Circle.defaultProps = {
     gridDotSize: 2,
     gridSpacing: 36,
   };
 
-  render() {
-    const { gridSpacing, gridDotSize } = this.props;
+  return Circle;
+})(React.Component);
 
-    return (
-      <circle
-        className="circle"
-        cx={(gridSpacing || 0) / 2}
-        cy={(gridSpacing || 0) / 2}
-        r={gridDotSize}
-      />
-    );
-  }
-}
-
-export default Circle;
+exports['default'] = Circle;

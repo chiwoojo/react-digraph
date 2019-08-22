@@ -6,8 +6,8 @@ module.exports = {
   mode: 'development',
   context: __dirname + '/src',
   entry: {
-    main: './index.js',
-    example: './examples/app.js',
+    main: './index.ts',
+    example: './examples/app.tsx',
     exampleCss: './examples/app.scss',
     css: './styles/main.scss',
   },

@@ -7,7 +7,7 @@ module.exports = {
   devtool: 'source-map',
   context: __dirname + '/src',
   entry: {
-    main: './index.js',
+    main: './index.ts',
     css: './styles/main.scss',
   },
 
@@ -52,7 +52,7 @@ module.exports = {
         ],
       },
       // All files with a '.ts' or '.tsx' extension will be handled by
-      // 'awesome-typescript-loader'.
+      // 'ts-loader'.
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',

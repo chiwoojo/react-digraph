@@ -1,31 +1,36 @@
-"use strict";
-exports.__esModule = true;
-var transformer_1 = require("../../../src/utilities/transformers/transformer");
-describe("Transformer", function () {
-    var output = null;
-    describe("class", function () {
-        it("is defined", function () {
-            expect(transformer_1["default"]).toBeDefined();
-        });
+import * as React from 'react';
+import Transformer from '../../../src/utilities/transformers/transformer';
+
+describe('Transformer', () => {
+  const output = null;
+
+  describe('class', () => {
+    it('is defined', () => {
+      expect(Transformer).toBeDefined();
     });
-    describe("transform method", function () {
-        it("returns a default response", function () {
-            var expected = {
-                edges: [],
-                nodes: []
-            };
-            var result = transformer_1["default"].transform();
-            expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
-        });
+  });
+
+  describe('transform method', () => {
+    it('returns a default response', () => {
+      const expected = {
+        edges: [],
+        nodes: [],
+      };
+      const result = Transformer.transform();
+
+      expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
-    describe("revert method", function () {
-        it("mocks out the revert method", function () {
-            var expected = {
-                edges: [],
-                nodes: []
-            };
-            var result = transformer_1["default"].revert(expected);
-            expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
-        });
+  });
+
+  describe('revert method', () => {
+    it('mocks out the revert method', () => {
+      const expected = {
+        edges: [],
+        nodes: [],
+      };
+      const result = Transformer.revert(expected);
+
+      expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
     });
+  });
 });

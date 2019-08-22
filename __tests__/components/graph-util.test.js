@@ -1,196 +1,242 @@
-"use strict";
-exports.__esModule = true;
-var graph_util_1 = require("../../src/utilities/graph-util");
-describe("GraphUtils class", function () {
-    describe("getNodesMap method", function () {
-        it("converts an array of nodes to a hash map", function () {
-            var nodes = [
-                {
-                    id: "foo",
-                    name: "bar"
-                }
-            ];
-            var nodesMap = graph_util_1["default"].getNodesMap(nodes, "id");
-            expect(JSON.stringify(nodesMap)).toEqual(JSON.stringify({
-                "key-foo": {
-                    children: [],
-                    incomingEdges: [],
-                    node: nodes[0],
-                    originalArrIndex: 0,
-                    outgoingEdges: [],
-                    parents: []
-                }
-            }));
-        });
+import GraphUtils from "../../src/utilities/graph-util";
+import { Edge } from "../../src";
+
+describe("GraphUtils class", () => {
+  describe("getNodesMap method", () => {
+    it("converts an array of nodes to a hash map", () => {
+      const nodes = [
+        {
+          id: "foo",
+          name: "bar"
+        }
+      ];
+      const nodesMap = GraphUtils.getNodesMap(nodes, "id");
+
+      expect(JSON.stringify(nodesMap)).toEqual(
+        JSON.stringify({
+          "key-foo": {
+            children: [],
+            incomingEdges: [],
+            node: nodes[0],
+            originalArrIndex: 0,
+            outgoingEdges: [],
+            parents: []
+          }
+        })
+      );
     });
-    describe("getEdgesMap method", function () {
-        it("converts an array of edges to a hash map", function () {
-            var edges = [
-                {
-                    source: "foo",
-                    target: "bar"
-                }
-            ];
-            var edgesMap = graph_util_1["default"].getEdgesMap(edges);
-            expect(JSON.stringify(edgesMap)).toEqual(JSON.stringify({
-                foo_bar: {
-                    edge: edges[0],
-                    originalArrIndex: 0
-                }
-            }));
-        });
+  });
+
+  describe("getEdgesMap method", () => {
+    it("converts an array of edges to a hash map", () => {
+      const edges = [
+        {
+          source: "foo",
+          target: "bar"
+        }
+      ];
+      const edgesMap = GraphUtils.getEdgesMap(edges);
+
+      expect(JSON.stringify(edgesMap)).toEqual(
+        JSON.stringify({
+          foo_bar: {
+            edge: edges[0],
+            originalArrIndex: 0
+          }
+        })
+      );
     });
-    describe("linkNodesAndEdges method", function () {
-        var nodesMap;
-        beforeEach(function () {
-            nodesMap = {
-                "key-bar": {
-                    children: [],
-                    incomingEdges: [],
-                    node: { id: "bar" },
-                    originalArrIndex: 0,
-                    outgoingEdges: [],
-                    parents: []
-                },
-                "key-foo": {
-                    children: [],
-                    incomingEdges: [],
-                    node: { id: "foo" },
-                    originalArrIndex: 0,
-                    outgoingEdges: [],
-                    parents: []
-                }
-            };
-        });
-        it("fills in various properties of a nodeMapNode", function () {
-            var edges = [
-                {
-                    source: "foo",
-                    target: "bar"
-                }
-            ];
-            graph_util_1["default"].linkNodesAndEdges(nodesMap, edges);
-            expect(nodesMap["key-bar"].incomingEdges.length).toEqual(1);
-            expect(nodesMap["key-bar"].incomingEdges[0]).toEqual(edges[0]);
-            expect(nodesMap["key-foo"].outgoingEdges.length).toEqual(1);
-            expect(nodesMap["key-foo"].outgoingEdges[0]).toEqual(edges[0]);
-            expect(nodesMap["key-foo"].children.length).toEqual(1);
-            expect(nodesMap["key-foo"].children[0]).toEqual(nodesMap["key-bar"]);
-            expect(nodesMap["key-bar"].parents.length).toEqual(1);
-            expect(nodesMap["key-bar"].parents[0]).toEqual(nodesMap["key-foo"]);
-        });
-        it("does not modify nodes if there is no matching target", function () {
-            var edges = [
-                {
-                    source: "foo",
-                    target: "fake"
-                }
-            ];
-            graph_util_1["default"].linkNodesAndEdges(nodesMap, edges);
-            expect(nodesMap["key-foo"].outgoingEdges.length).toEqual(0);
-            expect(nodesMap["key-foo"].children.length).toEqual(0);
-        });
-        it("does not modify nodes if there is no matching source", function () {
-            var edges = [
-                {
-                    source: "fake",
-                    target: "bar"
-                }
-            ];
-            graph_util_1["default"].linkNodesAndEdges(nodesMap, edges);
-            expect(nodesMap["key-bar"].incomingEdges.length).toEqual(0);
-            expect(nodesMap["key-bar"].parents.length).toEqual(0);
-        });
+  });
+
+  describe("linkNodesAndEdges method", () => {
+    let nodesMap;
+
+    beforeEach(() => {
+      nodesMap = {
+        "key-bar": {
+          children: [],
+          incomingEdges: [],
+          node: { id: "bar" },
+          originalArrIndex: 0,
+          outgoingEdges: [],
+          parents: []
+        },
+        "key-foo": {
+          children: [],
+          incomingEdges: [],
+          node: { id: "foo" },
+          originalArrIndex: 0,
+          outgoingEdges: [],
+          parents: []
+        }
+      };
     });
-    describe("removeElementFromDom method", function () {
-        it("removes an element using an id", function () {
-            var fakeElement = {
-                parentNode: {
-                    removeChild: jasmine.createSpy()
-                }
-            };
-            spyOn(document, "getElementById").and.returnValue(fakeElement);
-            var result = graph_util_1["default"].removeElementFromDom("fake");
-            expect(fakeElement.parentNode.removeChild).toHaveBeenCalledWith(fakeElement);
-            expect(result).toEqual(true);
-        });
-        it("does nothing when it can't find the element", function () {
-            spyOn(document, "getElementById").and.returnValue(undefined);
-            var result = graph_util_1["default"].removeElementFromDom("fake");
-            expect(result).toEqual(false);
-        });
+
+    it("fills in various properties of a nodeMapNode", () => {
+      const edges = [
+        {
+          source: "foo",
+          target: "bar"
+        }
+      ];
+
+      GraphUtils.linkNodesAndEdges(nodesMap, edges);
+
+      expect(nodesMap["key-bar"].incomingEdges.length).toEqual(1);
+      expect(nodesMap["key-bar"].incomingEdges[0]).toEqual(edges[0]);
+      expect(nodesMap["key-foo"].outgoingEdges.length).toEqual(1);
+      expect(nodesMap["key-foo"].outgoingEdges[0]).toEqual(edges[0]);
+      expect(nodesMap["key-foo"].children.length).toEqual(1);
+      expect(nodesMap["key-foo"].children[0]).toEqual(nodesMap["key-bar"]);
+      expect(nodesMap["key-bar"].parents.length).toEqual(1);
+      expect(nodesMap["key-bar"].parents[0]).toEqual(nodesMap["key-foo"]);
     });
-    describe("findParent method", function () {
-        it("returns the element if an element matches a selector", function () {
-            var element = {
-                matches: jasmine.createSpy().and.returnValue(true)
-            };
-            var parent = graph_util_1["default"].findParent(element, "fake");
-            expect(parent).toEqual(element);
-        });
-        it("returns the parent if an element contains a parentNode property", function () {
-            var element = {
-                parentNode: {
-                    matches: jasmine.createSpy().and.returnValue(true)
-                }
-            };
-            var parent = graph_util_1["default"].findParent(element, "fake");
-            expect(parent).toEqual(element.parentNode);
-        });
-        it("returns null when there is no match", function () {
-            var element = {
-                parentNode: {
-                    matches: jasmine.createSpy().and.returnValue(false)
-                }
-            };
-            var parent = graph_util_1["default"].findParent(element, "fake");
-            expect(parent).toEqual(null);
-        });
+
+    it("does not modify nodes if there is no matching target", () => {
+      const edges = [
+        {
+          source: "foo",
+          target: "fake"
+        }
+      ];
+
+      GraphUtils.linkNodesAndEdges(nodesMap, edges);
+
+      expect(nodesMap["key-foo"].outgoingEdges.length).toEqual(0);
+      expect(nodesMap["key-foo"].children.length).toEqual(0);
     });
-    describe("classNames static method", function () {
-        it("handles multiple string-based arguments", function () {
-            var result = graph_util_1["default"].classNames("test", "hello");
-            expect(result).toEqual("test hello");
-        });
-        it("handles a string and an array", function () {
-            var result = graph_util_1["default"].classNames("test", ["hello", "world"]);
-            expect(result).toEqual("test hello world");
-        });
-        it("handles a string and object", function () {
-            var result = graph_util_1["default"].classNames("test", {
-                hello: true,
-                world: false
-            });
-            expect(result).toEqual("test hello");
-        });
+
+    it("does not modify nodes if there is no matching source", () => {
+      const edges = [
+        {
+          source: "fake",
+          target: "bar"
+        }
+      ];
+
+      GraphUtils.linkNodesAndEdges(nodesMap, edges);
+
+      expect(nodesMap["key-bar"].incomingEdges.length).toEqual(0);
+      expect(nodesMap["key-bar"].parents.length).toEqual(0);
     });
-    describe("hasNodeShallowChanged", function () {
-        it("calls isEqual", function () {
-            jest.spyOn(graph_util_1["default"], "isEqual");
-            var node1 = { x: 0, y: 1 };
-            var node2 = { x: 0, y: 1 };
-            graph_util_1["default"].hasNodeShallowChanged(node1, node2);
-            expect(graph_util_1["default"].isEqual).toHaveBeenCalled();
-        });
-        it("does not find differences in 2 objects", function () {
-            var node1 = { x: 0, y: 1 };
-            var node2 = { x: 0, y: 1 };
-            var changed = graph_util_1["default"].hasNodeShallowChanged(node1, node2);
-            expect(changed).toEqual(false);
-        });
+  });
+
+  describe("removeElementFromDom method", () => {
+    it("removes an element using an id", () => {
+      const fakeElement = {
+        parentNode: {
+          removeChild: jasmine.createSpy()
+        }
+      };
+
+      spyOn(document, "getElementById").and.returnValue(fakeElement);
+      const result = GraphUtils.removeElementFromDom("fake");
+
+      expect(fakeElement.parentNode.removeChild).toHaveBeenCalledWith(
+        fakeElement
+      );
+      expect(result).toEqual(true);
     });
-    describe("isEqual", function () {
-        it("finds differences in 2 objects", function () {
-            var node1 = { x: 0, y: 1 };
-            var node2 = { x: 1, y: 2 };
-            var changed = graph_util_1["default"].hasNodeShallowChanged(node1, node2);
-            expect(changed).toEqual(true);
-        });
-        it("does not find differences in 2 objects", function () {
-            var node1 = { x: 0, y: 1 };
-            var node2 = { x: 0, y: 1 };
-            var changed = graph_util_1["default"].hasNodeShallowChanged(node1, node2);
-            expect(changed).toEqual(false);
-        });
+
+    it("does nothing when it can't find the element", () => {
+      spyOn(document, "getElementById").and.returnValue(undefined);
+      const result = GraphUtils.removeElementFromDom("fake");
+
+      expect(result).toEqual(false);
     });
+  });
+
+  describe("findParent method", () => {
+    it("returns the element if an element matches a selector", () => {
+      const element = {
+        matches: jasmine.createSpy().and.returnValue(true)
+      };
+      const parent = GraphUtils.findParent(element, "fake");
+
+      expect(parent).toEqual(element);
+    });
+
+    it("returns the parent if an element contains a parentNode property", () => {
+      const element = {
+        parentNode: {
+          matches: jasmine.createSpy().and.returnValue(true)
+        }
+      };
+      const parent = GraphUtils.findParent(element, "fake");
+
+      expect(parent).toEqual(element.parentNode);
+    });
+
+    it("returns null when there is no match", () => {
+      const element = {
+        parentNode: {
+          matches: jasmine.createSpy().and.returnValue(false)
+        }
+      };
+      const parent = GraphUtils.findParent(element, "fake");
+
+      expect(parent).toEqual(null);
+    });
+  });
+
+  describe("classNames static method", () => {
+    it("handles multiple string-based arguments", () => {
+      const result = GraphUtils.classNames("test", "hello");
+
+      expect(result).toEqual("test hello");
+    });
+
+    it("handles a string and an array", () => {
+      const result = GraphUtils.classNames("test", ["hello", "world"]);
+
+      expect(result).toEqual("test hello world");
+    });
+
+    it("handles a string and object", () => {
+      const result = GraphUtils.classNames("test", {
+        hello: true,
+        world: false
+      });
+
+      expect(result).toEqual("test hello");
+    });
+  });
+
+  describe("hasNodeShallowChanged", () => {
+    it("calls isEqual", () => {
+      jest.spyOn(GraphUtils, "isEqual");
+      const node1 = { x: 0, y: 1 };
+      const node2 = { x: 0, y: 1 };
+
+      GraphUtils.hasNodeShallowChanged(node1, node2);
+
+      expect(GraphUtils.isEqual).toHaveBeenCalled();
+    });
+
+    it("does not find differences in 2 objects", () => {
+      const node1 = { x: 0, y: 1 };
+      const node2 = { x: 0, y: 1 };
+      const changed = GraphUtils.hasNodeShallowChanged(node1, node2);
+
+      expect(changed).toEqual(false);
+    });
+  });
+
+  describe("isEqual", () => {
+    it("finds differences in 2 objects", () => {
+      const node1 = { x: 0, y: 1 };
+      const node2 = { x: 1, y: 2 };
+      const changed = GraphUtils.hasNodeShallowChanged(node1, node2);
+
+      expect(changed).toEqual(true);
+    });
+
+    it("does not find differences in 2 objects", () => {
+      const node1 = { x: 0, y: 1 };
+      const node2 = { x: 0, y: 1 };
+      const changed = GraphUtils.hasNodeShallowChanged(node1, node2);
+
+      expect(changed).toEqual(false);
+    });
+  });
 });

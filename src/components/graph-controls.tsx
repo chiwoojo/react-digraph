@@ -36,7 +36,7 @@ interface IGraphControlProps {
 }
 
 class GraphControls extends React.Component<IGraphControlProps> {
-  static defaultProps = {
+  public static defaultProps = {
     maxZoom: 1.5,
     minZoom: 0.15,
   };
